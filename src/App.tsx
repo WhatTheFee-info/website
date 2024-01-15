@@ -3,30 +3,47 @@ import {
   ActionType,
   AppContext,
   AppDispatchContext,
-  feeReducer,
+  appReducer,
   initialState,
 } from './AppContext';
 import FeeRatePanel from './ui/components/FeeRatePanel';
 import TxTemplatesGrid from './ui/components/TxTemplatesGrid';
 import './App.css';
-import { getRecommendedFees } from './services/fee.service';
+import { getFeeStats } from './services/fee.service';
+import { FEES_FETCH_INTERVAL_SEC } from './constants';
 
 function App() {
-  const [state, dispatch] = useReducer(feeReducer, initialState);
+  const [state, dispatch] = useReducer(appReducer, initialState);
 
-  useEffect(() => {
+  function fetchFeesStats() {
+    // only fetch if not fetched fro FEES_FETCH_INTERVAL_SEC seconds
+    if (state.feeStats && state.feesLastFetchedAt) {
+      const secondsFromLastFetch =
+        (new Date().getTime() - state.feesLastFetchedAt.getTime()) / 1000;
+      if (secondsFromLastFetch < FEES_FETCH_INTERVAL_SEC) {
+        console.debug(
+          `Already fetched fees ${secondsFromLastFetch} seconds ago.`,
+        );
+        return;
+      }
+    }
+
     // load the recommended fees
-    getRecommendedFees()
-      .then((recommendedFees) => {
+    getFeeStats()
+      .then((feeStats) => {
         dispatch({
-          type: ActionType.SET_FEES,
-          fees: recommendedFees,
+          type: ActionType.SET_FEES_STATS,
+          fees: feeStats,
         });
       })
       .catch((error) => {
-        console.error('Error getting fees', error);
+        console.error('Error getting fees stats', error);
       });
-  }, []);
+  }
+
+  useEffect(() => {
+    fetchFeesStats();
+  });
 
   return (
     <>

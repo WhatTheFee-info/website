@@ -1,12 +1,15 @@
 import React, { createContext } from 'react';
-import { FeesRecommended } from './types';
+import { FeesStats } from './types';
+import { FEES_FETCH_INTERVAL_SEC } from './constants';
 
 export interface IAppState {
-  fees?: FeesRecommended;
+  feeStats?: FeesStats;
+  feesLastFetchedAt?: Date;
 }
 
 export const initialState: IAppState = {
-  fees: undefined,
+  feeStats: undefined,
+  feesLastFetchedAt: undefined,
 };
 
 export interface IAppContext {
@@ -17,20 +20,24 @@ export interface IAppContext {
 //#region ------ Reducers ------
 
 export enum ActionType {
-  SET_FEES = 'SET_FEES',
+  SET_FEES_STATS = 'SET_FEES_STATS',
 }
 export type IAction = {
   type: ActionType;
-  fees?: FeesRecommended;
+  fees?: FeesStats;
 };
-export function feeReducer(prevState: IAppState, action: IAction): IAppState {
-  console.debug(`feeReducer called: ${action.type}`);
+export function appReducer(prevState: IAppState, action: IAction): IAppState {
+  console.debug(`appReducer called: ${action.type}`);
 
   switch (action.type) {
-    case ActionType.SET_FEES:
-      return { ...prevState, fees: action.fees };
+    case ActionType.SET_FEES_STATS:
+      return {
+        ...prevState,
+        feeStats: action.fees,
+        feesLastFetchedAt: new Date(),
+      };
     default:
-      throw Error(`Fee reducer - Unknown action: ${action.type}`);
+      throw Error(`App reducer - Unknown action: ${action.type}`);
   }
 }
 

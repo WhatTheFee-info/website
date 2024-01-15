@@ -7,26 +7,22 @@ export default function FeeRatePanel() {
 
   return (
     <div className="flex my-4">
-      {appContext?.fees ? (
+      {appContext?.feeStats ? (
         <>
           <FeeRateBox
-            title="No priority"
-            feeRateSatVb={appContext?.fees.economyFee}
+            title="Next hour"
+            level="low"
+            feeRateSatVb={appContext?.feeStats.hourFee}
           />
           <FeeRateBox
-            title="Low priority"
-            level='low'
-            feeRateSatVb={appContext?.fees.hourFee}
+            title="Median (next block)"
+            level="medium"
+            feeRateSatVb={Math.round(appContext?.feeStats.medianNextBlock * 100) / 100}
           />
           <FeeRateBox
-            title="Medium priority"
-            level='medium'
-            feeRateSatVb={appContext?.fees.halfHourFee}
-          />
-          <FeeRateBox
-            title="High priority"
-            level='high'
-            feeRateSatVb={appContext?.fees.fastestFee}
+            title="Next block"
+            level="high"
+            feeRateSatVb={appContext?.feeStats.fastestFee}
           />
         </>
       ) : (

@@ -1,0 +1,1 @@
+export const FEES_FETCH_INTERVAL_SEC = 120;

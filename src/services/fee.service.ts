@@ -1,6 +1,23 @@
-import { FeesRecommended } from '../types';
+import { FeesStats } from '../types';
 
 const MEMPOO_API_BASE_URL = 'https://mempool.space/api/v1';
+
+interface FeesRecommended {
+  fastestFee: number;
+  halfHourFee: number;
+  hourFee: number;
+  economyFee: number;
+  minimumFee: number;
+}
+
+interface FeesMempoolBlock {
+  blockSize: number;
+  blockVSize: number;
+  nTx: number;
+  totalFees: number;
+  medianFee: number;
+  feeRange: number[];
+}
 
 async function apiGet<T>(path: string): Promise<T> {
   const response = await fetch(`${MEMPOO_API_BASE_URL}${path}`);
@@ -13,8 +30,13 @@ async function apiGet<T>(path: string): Promise<T> {
   }
 }
 
-export async function getRecommendedFees(): Promise<FeesRecommended> {
+export async function getFeeStats(): Promise<FeesStats> {
   console.log('Getting the fees...');
-  const fees = await apiGet<FeesRecommended>('/fees/recommended');
-  return fees;
+  const recommendedFees = await apiGet<FeesRecommended>('/fees/recommended');
+  const mempoolBlockFees =
+    await apiGet<FeesMempoolBlock[]>('/fees/mempool-blocks');
+  return {
+    ...recommendedFees,
+    medianNextBlock: mempoolBlockFees[0].medianFee,
+  };
 }

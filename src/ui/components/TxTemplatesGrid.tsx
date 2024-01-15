@@ -6,7 +6,7 @@ import definedTemplates from '../../templates';
 import TxTemplateBox from './TxTemplateBox';
 
 export default function TxTemplatesGrid() {
-  const { fees } = useContext(AppContext);
+  const { feeStats: fees } = useContext(AppContext);
   const [calculatedTemplates, setCalculatedTemplates] =
     useState<TxTemplate[]>();
 
@@ -24,6 +24,7 @@ export default function TxTemplatesGrid() {
         hour: template.sizeVB * (fees?.hourFee ?? 0),
         halfHour: template.sizeVB * (fees?.halfHourFee ?? 0),
         fastest: template.sizeVB * (fees?.fastestFee ?? 0),
+        median: template.sizeVB * (fees?.medianNextBlock ?? 0),
       };
     }
     setCalculatedTemplates(calculatedTemplates);

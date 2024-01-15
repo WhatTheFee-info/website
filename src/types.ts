@@ -1,9 +1,10 @@
-export interface FeesRecommended {
+export interface FeesStats {
   fastestFee: number;
   halfHourFee: number;
   hourFee: number;
   economyFee: number;
   minimumFee: number;
+  medianNextBlock: number;
 }
 
 export enum TxInputType {
@@ -40,5 +41,6 @@ export type TxTemplate = {
     hour: number;
     economy: number;
     minimum: number;
+    median: number;
   };
 };
