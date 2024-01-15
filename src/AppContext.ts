@@ -1,6 +1,5 @@
 import React, { createContext } from 'react';
 import { FeesStats } from './types';
-import { FEES_FETCH_INTERVAL_SEC } from './constants';
 
 export interface IAppState {
   feeStats?: FeesStats;

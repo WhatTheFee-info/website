@@ -1,11 +1,11 @@
 import { ReportsSolid } from 'iconoir-react';
 import { TxTemplate } from '../../types';
 
-interface TxTemplateBoxProps {
+interface TxTemplateCardProps {
   template: TxTemplate;
 }
 
-export default function TxTemplateBox({ template }: TxTemplateBoxProps) {
+export default function TxTemplateCard({ template }: TxTemplateCardProps) {
   return (
     <div className="flex flex-row rounded border border-slate-300 shadow hover:shadow-lg p-4 m-2">
       <div className="flex-col m-2">
@@ -16,28 +16,21 @@ export default function TxTemplateBox({ template }: TxTemplateBoxProps) {
       <div className="flex-col ml-2">
         <div
           className="text-nowrap text-right flex flex-row justify-end"
-          title="No priority"
-        >
-          {template.costSats?.economy} sats
-          <ReportsSolid className="text-slate-600" />
-        </div>
-        <div
-          className="text-nowrap text-right flex flex-row justify-end"
-          title="Low priority"
+          title="Next hour"
         >
           {template.costSats?.hour} sats
           <ReportsSolid className="text-lime-600" />
         </div>
         <div
           className="text-nowrap text-right flex flex-row justify-end"
-          title="Medium priority"
+          title="Median (next block)"
         >
           {template.costSats?.halfHour} sats
           <ReportsSolid className="text-amber-600" />
         </div>
         <div
           className="text-nowrap text-right flex flex-row justify-end"
-          title="Hight priority"
+          title="Next block"
         >
           {template.costSats?.fastest} sats
           <ReportsSolid className="text-red-600" />
