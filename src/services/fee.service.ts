@@ -15,13 +15,6 @@ async function apiGet<T>(path: string): Promise<T> {
 
 export async function getRecommendedFees(): Promise<FeesRecommended> {
   console.log('Getting the fees...');
-  return {
-    fastestFee: 124,
-    halfHourFee: 120,
-    hourFee: 114,
-    economyFee: 50,
-    minimumFee: 25,
-  };
   const fees = await apiGet<FeesRecommended>('/fees/recommended');
   return fees;
 }

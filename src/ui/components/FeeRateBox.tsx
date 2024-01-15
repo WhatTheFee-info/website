@@ -1,10 +1,14 @@
-interface FeeRateBox {
+interface FeeRateBoxProps {
   title: string;
   level?: 'no-priority' | 'low' | 'medium' | 'high';
   feeRateSatVb: number;
 }
 
-export default function FeeRateBox({ title, feeRateSatVb, level }: FeeRateBox) {
+export default function FeeRateBox({
+  title,
+  feeRateSatVb,
+  level,
+}: FeeRateBoxProps) {
   let bgClass = 'from-slate-200 to-slage-400';
   switch (level) {
     case 'low':
@@ -20,7 +24,7 @@ export default function FeeRateBox({ title, feeRateSatVb, level }: FeeRateBox) {
 
   return (
     <div
-      className={`flex-1 text-center  rounded border border-slate-300 drop-shadow p-6 mx-3 bg-gradient-to-tr ${bgClass}`}
+      className={`flex-1 text-center  rounded border border-slate-300 shadow p-6 mx-3 bg-gradient-to-tr ${bgClass}`}
     >
       <h4 className="font-bold">{title}</h4>
       <div>{feeRateSatVb} sat/vB</div>

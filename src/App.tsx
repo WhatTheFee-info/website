@@ -7,7 +7,7 @@ import {
   initialState,
 } from './AppContext';
 import FeeRatePanel from './ui/components/FeeRatePanel';
-import TxTemplatesTable from './ui/components/TxTemplatesTable';
+import TxTemplatesGrid from './ui/components/TxTemplatesGrid';
 import './App.css';
 import { getRecommendedFees } from './services/fee.service';
 
@@ -44,7 +44,7 @@ function App() {
 
             <section id="tx-templates" className="mb-8">
               <h2 className="text-2xl font-bold">Transaction templates</h2>
-              <TxTemplatesTable />
+              <TxTemplatesGrid />
             </section>
           </div>
         </AppDispatchContext.Provider>

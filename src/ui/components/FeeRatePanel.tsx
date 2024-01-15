@@ -11,7 +11,7 @@ export default function FeeRatePanel() {
         <>
           <FeeRateBox
             title="No priority"
-            feeRateSatVb={appContext?.fees.minimumFee}
+            feeRateSatVb={appContext?.fees.economyFee}
           />
           <FeeRateBox
             title="Low priority"
