@@ -15,14 +15,17 @@ export default function FeeRatePanel() {
           />
           <FeeRateBox
             title="Low priority"
+            level='low'
             feeRateSatVb={appContext?.fees.hourFee}
           />
           <FeeRateBox
             title="Medium priority"
+            level='medium'
             feeRateSatVb={appContext?.fees.halfHourFee}
           />
           <FeeRateBox
             title="High priority"
+            level='high'
             feeRateSatVb={appContext?.fees.fastestFee}
           />
         </>

@@ -29,7 +29,6 @@ export function feeReducer(prevState: IAppState, action: IAction): IAppState {
   switch (action.type) {
     case ActionType.SET_FEES:
       return { ...prevState, fees: action.fees };
-      break;
     default:
       throw Error(`Fee reducer - Unknown action: ${action.type}`);
   }

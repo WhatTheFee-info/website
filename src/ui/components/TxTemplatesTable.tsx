@@ -1,4 +1,5 @@
 import { useContext, useEffect, useState } from 'react';
+import { ReportsSolid } from 'iconoir-react';
 import { TxTemplate } from '../../types';
 import { calcaulteSize } from '../../services/transaction.service';
 import { AppContext } from '../../AppContext';
@@ -32,45 +33,34 @@ export default function TxTemplatesTable() {
       {!calculatedTemplates || calculatedTemplates.length == 0 ? (
         <p>(No transaction templates available)</p>
       ) : (
-        <div className="flex-1 flex-column">
-          <div className="flex flex-row font-bold text-lg border-b border-slate-300">
-            <div className="grow">
-              <h4 className="text-left">Template</h4>
-            </div>
-            <div className="w-1/12">
-              <h4 className="text-right">Size</h4>
-            </div>
-            <div className="w-1/12">
-              <h4 className="text-right">No priority</h4>
-            </div>
-            <div className="w-1/12">
-              <h4 className="text-right">Low</h4>
-            </div>
-            <div className="w-1/12">
-              <h4 className="text-right">Medium</h4>
-            </div>
-            <div className="w-1/12">
-              <h4 className="text-right">High</h4>
-            </div>
-          </div>
+        <div className="flex flex-row">
           {calculatedTemplates.map((template) => (
-            <div key={template.code} className="flex flex-row">
-              <div className="grow">
-                <h4 className="text-left">{template.name}</h4>
+            <div
+              key={template.code}
+              className="flex flex-row rounded border border-slate-300 drop-shadow p-6 m-2"
+            >
+              <div className="flex-col m-2">
+                <h4 className="text-left font-bold">{template.name}</h4>
                 <small>{`${template.inputs.length} inputs -> ${template.outputs.length} outputs`}</small>
+                <div className="text-left">{template.sizeVB} vBytes</div>
               </div>
-              <div className="w-1/12 text-right">{template.sizeVB} vBytes</div>
-              <div className="w-1/12 text-right">
-                {template.costSats?.economy} sats
-              </div>
-              <div className="w-1/12 text-right">
-                {template.costSats?.hour} sats
-              </div>
-              <div className="w-1/12 text-right">
-                {template.costSats?.halfHour} sats
-              </div>
-              <div className="w-1/12 text-right">
-                {template.costSats?.fastest} sats
+              <div className="flex-col">
+                <div className="text-nowrap text-right flex flex-row">
+                  <ReportsSolid className="text-slate-600" />
+                  {template.costSats?.economy} sats
+                </div>
+                <div className="text-nowrap text-right flex flex-row">
+                  <ReportsSolid className="text-lime-600" />
+                  {template.costSats?.hour} sats
+                </div>
+                <div className="text-nowrap text-right flex flex-row">
+                  <ReportsSolid className="text-amber-600" />
+                  {template.costSats?.halfHour} sats
+                </div>
+                <div className="text-nowrap text-right flex flex-row">
+                  <ReportsSolid className="text-red-600" />
+                  {template.costSats?.fastest} sats
+                </div>
               </div>
             </div>
           ))}
