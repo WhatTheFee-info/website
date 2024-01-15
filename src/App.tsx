@@ -11,12 +11,6 @@ import TxTemplatesTable from './ui/components/TxTemplatesTable';
 import './App.css';
 import { getRecommendedFees } from './services/fee.service';
 
-function AppContextProvider({ children }: { children: React.ReactNode }) {
-  const [state, dispatch] = useReducer(feeReducer, initialState);
-  const value = { state, dispatch };
-  return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
-}
-
 function App() {
   const [state, dispatch] = useReducer(feeReducer, initialState);
 
