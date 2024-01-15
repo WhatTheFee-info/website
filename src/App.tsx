@@ -11,8 +11,14 @@ import TxTemplatesTable from './ui/components/TxTemplatesTable';
 import './App.css';
 import { getRecommendedFees } from './services/fee.service';
 
+function AppContextProvider({ children }: { children: React.ReactNode }) {
+  const [state, dispatch] = useReducer(feeReducer, initialState);
+  const value = { state, dispatch };
+  return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
+}
+
 function App() {
-  const [fees, dispatch] = useReducer(feeReducer, initialState);
+  const [state, dispatch] = useReducer(feeReducer, initialState);
 
   useEffect(() => {
     // load the recommended fees
@@ -30,7 +36,7 @@ function App() {
 
   return (
     <>
-      <AppContext.Provider value={fees}>
+      <AppContext.Provider value={state}>
         <AppDispatchContext.Provider value={dispatch}>
           <div className="container mx-auto">
             <section className="text-center mb-8">

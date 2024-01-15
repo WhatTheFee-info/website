@@ -5,7 +5,7 @@ import { AppContext } from '../../AppContext';
 import definedTemplates from '../../templates';
 
 export default function TxTemplatesTable() {
-  const appContext = useContext(AppContext);
+  const { fees } = useContext(AppContext);
   const [calculatedTemplates, setCalculatedTemplates] =
     useState<TxTemplate[]>();
 
@@ -17,15 +17,15 @@ export default function TxTemplatesTable() {
       template.sizeVB = calcaulteSize(template);
       // now calculate cost
       template.costSats = {
-        economy: template.sizeVB * (appContext.fees?.economyFee ?? 0),
-        minimum: template.sizeVB * (appContext.fees?.minimumFee ?? 0),
-        hour: template.sizeVB * (appContext.fees?.hourFee ?? 0),
-        halfHour: template.sizeVB * (appContext.fees?.halfHourFee ?? 0),
-        fastest: template.sizeVB * (appContext.fees?.fastestFee ?? 0),
+        economy: template.sizeVB * (fees?.economyFee ?? 0),
+        minimum: template.sizeVB * (fees?.minimumFee ?? 0),
+        hour: template.sizeVB * (fees?.hourFee ?? 0),
+        halfHour: template.sizeVB * (fees?.halfHourFee ?? 0),
+        fastest: template.sizeVB * (fees?.fastestFee ?? 0),
       };
     }
     setCalculatedTemplates(calculatedTemplates);
-  }, [appContext.fees]);
+  }, [fees]);
 
   return (
     <div className="flex-1 my-4 md:px-4">
