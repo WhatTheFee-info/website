@@ -7,7 +7,7 @@ interface TxTemplateCardProps {
 
 export default function TxTemplateCard({ template }: TxTemplateCardProps) {
   return (
-    <div className="flex flex-row rounded border border-slate-300 shadow hover:shadow-lg p-4 m-2">
+    <div className="flex flex-row rounded border border-slate-300 shadow dark:shadow-slate-300 hover:shadow-lg p-4 m-2">
       <div className="flex-col m-2">
         <h4 className="text-left font-bold">{template.name}</h4>
         <small>{`${template.inputs.length} inputs -> ${template.outputs.length} outputs`}</small>

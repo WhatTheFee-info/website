@@ -24,7 +24,7 @@ export default function FeeRateCard({
 
   return (
     <div
-      className={`flex-1 text-center rounded border border-slate-300 shadow p-6 m-3 bg-gradient-to-tr ${bgClass}`}
+      className={`flex-1 text-center text-slate-800 rounded border border-slate-300 shadow p-6 m-3 bg-gradient-to-tr ${bgClass}`}
     >
       <h4 className="font-bold text-nowrap">{title}</h4>
       <div>{feeRateSatVb} sat/vB</div>

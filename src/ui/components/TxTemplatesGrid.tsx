@@ -1,12 +1,14 @@
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { TxTemplate } from '../../types';
 import { calcaulteSize } from '../../services/transaction.service';
-import { AppContext } from '../../AppContext';
 import definedTemplates from '../../templates';
 import TxTemplateCard from './TxTemplateCard';
+import { useAppContext } from '../../AppContext';
 
 export default function TxTemplatesGrid() {
-  const { feeStats: fees } = useContext(AppContext);
+  const {
+    state: { feeStats },
+  } = useAppContext();
   const [calculatedTemplates, setCalculatedTemplates] =
     useState<TxTemplate[]>();
 
@@ -19,12 +21,12 @@ export default function TxTemplatesGrid() {
       template.sizeVB = calcaulteSize(template);
       // now calculate cost (use Math.ceil to round up sats amoung)
       template.costSats = {
-        economy: Math.ceil(template.sizeVB * (fees?.economyFee ?? 0)),
-        minimum: Math.ceil(template.sizeVB * (fees?.minimumFee ?? 0)),
-        hour: Math.ceil(template.sizeVB * (fees?.hourFee ?? 0)),
-        halfHour: Math.ceil(template.sizeVB * (fees?.halfHourFee ?? 0)),
-        fastest: Math.ceil(template.sizeVB * (fees?.fastestFee ?? 0)),
-        median: Math.ceil(template.sizeVB * (fees?.medianNextBlock ?? 0)),
+        economy: Math.ceil(template.sizeVB * (feeStats?.economyFee ?? 0)),
+        minimum: Math.ceil(template.sizeVB * (feeStats?.minimumFee ?? 0)),
+        hour: Math.ceil(template.sizeVB * (feeStats?.hourFee ?? 0)),
+        halfHour: Math.ceil(template.sizeVB * (feeStats?.halfHourFee ?? 0)),
+        fastest: Math.ceil(template.sizeVB * (feeStats?.fastestFee ?? 0)),
+        median: Math.ceil(template.sizeVB * (feeStats?.medianNextBlock ?? 0)),
       };
     }
     setCalculatedTemplates(calculatedTemplates);
@@ -32,7 +34,7 @@ export default function TxTemplatesGrid() {
 
   useEffect(() => {
     calculateTemplatesCosts();
-  }, [fees]);
+  }, [feeStats]);
 
   return (
     <div className="flex-1 my-4 md:px-4">

@@ -11,6 +11,7 @@ import TxTemplatesGrid from './ui/components/TxTemplatesGrid';
 import './App.css';
 import { getFeeStats } from './services/fee.service';
 import { FEES_FETCH_INTERVAL_SEC } from './constants';
+import ThemeSwitch from './ui/components/ThemeSwitch';
 
 function App() {
   const [state, dispatch] = useReducer(appReducer, initialState);
@@ -43,13 +44,14 @@ function App() {
 
   useEffect(() => {
     fetchFeesStats();
-  });
+  }, []);
 
   return (
     <>
       <AppContext.Provider value={state}>
         <AppDispatchContext.Provider value={dispatch}>
           <div className="container mx-auto">
+            <ThemeSwitch />
             <section className="text-center mb-8">
               <h1 className="">WhatTheFee.info</h1>
               <p>Check how much your transaction will cost</p>

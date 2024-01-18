@@ -1,3 +1,8 @@
+export enum Themes {
+  light = 'light',
+  dark = 'dark',
+}
+
 export interface FeesStats {
   fastestFee: number;
   halfHourFee: number;

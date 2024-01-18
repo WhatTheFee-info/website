@@ -1,30 +1,29 @@
-import { useContext } from 'react';
 import FeeRateCard from './FeeRateCard';
-import { AppContext } from '../../AppContext';
+import { useAppContext } from '../../AppContext';
 
 export default function FeeRatePanel() {
-  const appContext = useContext(AppContext);
+  const {
+    state: { feeStats },
+  } = useAppContext();
 
   return (
     <div className="flex md:flex-row flex-col my-4">
-      {appContext?.feeStats ? (
+      {feeStats ? (
         <>
           <FeeRateCard
             title="Next hour"
             level="low"
-            feeRateSatVb={appContext?.feeStats.hourFee}
+            feeRateSatVb={feeStats.hourFee}
           />
           <FeeRateCard
             title="Median (next block)"
             level="medium"
-            feeRateSatVb={
-              Math.round(appContext?.feeStats.medianNextBlock * 100) / 100
-            }
+            feeRateSatVb={Math.round(feeStats.medianNextBlock * 100) / 100}
           />
           <FeeRateCard
             title="Next block"
             level="high"
-            feeRateSatVb={appContext?.feeStats.fastestFee}
+            feeRateSatVb={feeStats.fastestFee}
           />
         </>
       ) : (
