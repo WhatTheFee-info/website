@@ -1,4 +1,4 @@
-export enum Themes {
+export enum Theme {
   light = 'light',
   dark = 'dark',
 }
@@ -10,6 +10,10 @@ export interface FeesStats {
   economyFee: number;
   minimumFee: number;
   medianNextBlock: number;
+}
+
+export interface ExchangeRates {
+  [currency: string]: number;
 }
 
 export enum TxInputType {

@@ -1,3 +1,4 @@
+import APIClient from '../APIClient';
 import { FeesStats } from '../types';
 
 const MEMPOO_API_BASE_URL = 'https://mempool.space/api/v1';
@@ -19,22 +20,15 @@ interface FeesMempoolBlock {
   feeRange: number[];
 }
 
-async function apiGet<T>(path: string): Promise<T> {
-  const response = await fetch(`${MEMPOO_API_BASE_URL}${path}`);
-  const body = await response.json();
-  if (response.status >= 200 && response.status < 300) {
-    return body;
-  } else {
-    const error = new Error(body);
-    throw error;
-  }
-}
+const apiClient = new APIClient(MEMPOO_API_BASE_URL);
 
 export async function getFeeStats(): Promise<FeesStats> {
   console.log('Getting the fees...');
-  const recommendedFees = await apiGet<FeesRecommended>('/fees/recommended');
-  const mempoolBlockFees =
-    await apiGet<FeesMempoolBlock[]>('/fees/mempool-blocks');
+  const recommendedFees =
+    await apiClient.get<FeesRecommended>('/fees/recommended');
+  const mempoolBlockFees = await apiClient.get<FeesMempoolBlock[]>(
+    '/fees/mempool-blocks',
+  );
   return {
     ...recommendedFees,
     medianNextBlock: mempoolBlockFees[0].medianFee,

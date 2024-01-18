@@ -1,5 +1,5 @@
 import { ActionType, useAppContext } from '../../AppContext';
-import { Themes } from '../../types';
+import { Theme } from '../../types';
 
 export default function ThemeSwitch() {
   const {
@@ -9,16 +9,16 @@ export default function ThemeSwitch() {
 
   function handleOnChange(event: React.ChangeEvent<HTMLInputElement>) {
     console.log('event', event.target.value);
-    let newTheme: Themes = Themes.light;
-    if (theme == Themes.light) {
-      newTheme = Themes.dark;
+    let newTheme: Theme = Theme.light;
+    if (theme == Theme.light) {
+      newTheme = Theme.dark;
     }
     dispatch({
       type: ActionType.CHANGE_THEME,
       theme: newTheme,
     });
     // now change the class in the <html> element
-    if (newTheme == Themes.dark) {
+    if (newTheme == Theme.dark) {
       document.documentElement.classList.add('dark');
     } else {
       document.documentElement.classList.remove('dark');
@@ -26,7 +26,7 @@ export default function ThemeSwitch() {
   }
 
   return (
-    <label className="sticky top-4 right-4 inline-flex items-center cursor-pointer">
+    <label className="absolute top-4 left-4 inline-flex items-center cursor-pointer">
       <input
         className="sr-only peer"
         value={theme}

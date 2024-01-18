@@ -10,8 +10,13 @@ import FeeRatePanel from './ui/components/FeeRatePanel';
 import TxTemplatesGrid from './ui/components/TxTemplatesGrid';
 import './App.css';
 import { getFeeStats } from './services/fee.service';
-import { FEES_FETCH_INTERVAL_SEC } from './constants';
+import {
+  EXRATES_FETCH_INTERVAL_SEC,
+  FEES_FETCH_INTERVAL_SEC,
+} from './constants';
 import ThemeSwitch from './ui/components/ThemeSwitch';
+import { getExchangeRates } from './services/exchangeRate.service';
+import CurrencySelect from './ui/components/CurrencySelect';
 
 function App() {
   const [state, dispatch] = useReducer(appReducer, initialState);
@@ -42,8 +47,35 @@ function App() {
       });
   }
 
+  function fetchExchangeRates() {
+    // only fetch if not fetched fro EXRATES_FETCH_INTERVAL_SEC seconds
+    if (state.exRates && state.exRatesLastFetchedAt) {
+      const secondsFromLastFetch =
+        (new Date().getTime() - state.exRatesLastFetchedAt.getTime()) / 1000;
+      if (secondsFromLastFetch < EXRATES_FETCH_INTERVAL_SEC) {
+        console.debug(
+          `Already fetched exchange rates ${secondsFromLastFetch} seconds ago.`,
+        );
+        return;
+      }
+    }
+
+    // load the recommended fees
+    getExchangeRates()
+      .then((exRates) => {
+        dispatch({
+          type: ActionType.SET_EX_RATES,
+          exRates: exRates,
+        });
+      })
+      .catch((error) => {
+        console.error('Error getting exchange rates', error);
+      });
+  }
+
   useEffect(() => {
     fetchFeesStats();
+    fetchExchangeRates();
   }, []);
 
   return (
@@ -52,6 +84,7 @@ function App() {
         <AppDispatchContext.Provider value={dispatch}>
           <div className="container mx-auto">
             <ThemeSwitch />
+            <CurrencySelect />
             <section className="text-center mb-8">
               <h1 className="">WhatTheFee.info</h1>
               <p>Check how much your transaction will cost</p>

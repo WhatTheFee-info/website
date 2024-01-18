@@ -1,16 +1,19 @@
 import React, { createContext, useContext } from 'react';
-import { FeesStats, Themes } from './types';
+import { ExchangeRates, FeesStats, Theme } from './types';
 
 export interface IAppState {
+  theme: Theme;
   feeStats?: FeesStats;
   feesLastFetchedAt?: Date;
-  theme: Themes;
+  exRates?: ExchangeRates;
+  exRatesLastFetchedAt?: Date;
+  selectedCurrency?: string;
 }
 
 export const initialState: IAppState = {
+  theme: Theme.light,
   feeStats: undefined,
   feesLastFetchedAt: undefined,
-  theme: Themes.light,
 };
 
 export interface IAppContext {
@@ -21,28 +24,43 @@ export interface IAppContext {
 //#region ------ Reducers ------
 
 export enum ActionType {
-  SET_FEES_STATS = 'SET_FEES_STATS',
   CHANGE_THEME = 'CHANGE_THEME',
+  SET_FEES_STATS = 'SET_FEES_STATS',
+  SET_EX_RATES = 'SET_EX_RATES',
+  SET_SELECTED_CURRENCY = 'SET_SELECTED_CURRENCY',
 }
 export type IAction = {
   type: ActionType;
+  theme?: Theme;
   fees?: FeesStats;
-  theme?: Themes;
+  exRates?: ExchangeRates;
+  selectedCurrency?: string;
 };
 export function appReducer(prevState: IAppState, action: IAction): IAppState {
   console.debug(`appReducer called: ${action.type}`);
 
   switch (action.type) {
+    case ActionType.CHANGE_THEME:
+      return {
+        ...prevState,
+        theme: action.theme ?? Theme.light,
+      };
     case ActionType.SET_FEES_STATS:
       return {
         ...prevState,
         feeStats: action.fees,
         feesLastFetchedAt: new Date(),
       };
-    case ActionType.CHANGE_THEME:
+    case ActionType.SET_EX_RATES:
       return {
         ...prevState,
-        theme: action.theme ?? Themes.light,
+        exRates: action.exRates,
+        exRatesLastFetchedAt: new Date(),
+      };
+    case ActionType.SET_SELECTED_CURRENCY:
+      return {
+        ...prevState,
+        selectedCurrency: action.selectedCurrency,
       };
     default:
       throw Error(`App reducer - Unknown action: ${action.type}`);
