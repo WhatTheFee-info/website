@@ -26,7 +26,7 @@ export default function ThemeSwitch() {
   }
 
   return (
-    <label className="absolute top-4 left-4 inline-flex items-center cursor-pointer">
+    <label className="relative inline-flex items-center cursor-pointer">
       <input
         className="sr-only peer"
         value={theme}
@@ -45,7 +45,7 @@ export default function ThemeSwitch() {
             
             after:flex after:items-center after:justify-center 
             after:content-['🌑'] after:absolute after:bg-[#1d1d1d] after:rounded-full 
-            after:top-[2px] after:right-1 after:-translate-x-full after:w-5 after:h-5 
+            after:top-[7px] after:right-1 after:-translate-x-full after:w-5 after:h-5 
             after:opacity-0 after:transition-all after:duration-700 
             
             peer-checked:before:opacity-0 

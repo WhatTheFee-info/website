@@ -14,15 +14,17 @@ export default function CurrencySelect() {
   }
 
   return (
-    <div className="absolute right-4 top-4">
+    <div className="">
       {exRates && (
         <select
           id="currency-select"
           onChange={handleChange}
-          className="p-1 rounded border border-slate-300"
+          className="p-2 bg-slate-50 dark:bg-slate-400 dark:text-slate-800 rounded-lg border border-slate-300"
         >
           {Object.keys(exRates).map((currency) => (
-            <option value={currency} key={currency}>{currency}</option>
+            <option value={currency} key={currency}>
+              {currency}
+            </option>
           ))}
         </select>
       )}

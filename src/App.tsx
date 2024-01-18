@@ -17,6 +17,7 @@ import {
 import ThemeSwitch from './ui/components/ThemeSwitch';
 import { getExchangeRates } from './services/exchangeRate.service';
 import CurrencySelect from './ui/components/CurrencySelect';
+import SiteHeader from './ui/components/SiteHeader';
 
 function App() {
   const [state, dispatch] = useReducer(appReducer, initialState);
@@ -82,15 +83,12 @@ function App() {
     <>
       <AppContext.Provider value={state}>
         <AppDispatchContext.Provider value={dispatch}>
-          <div className="container mx-auto">
-            <ThemeSwitch />
-            <CurrencySelect />
-            <section className="text-center mb-8">
-              <h1 className="">WhatTheFee.info</h1>
-              <p>Check how much your transaction will cost</p>
-            </section>
-
+          <SiteHeader />
+          <main className="relative pt-20 px-2 md:px-0">
             <section id="fee-rates" className="mb-8">
+              <h2 className="text-2xl font-bold">
+                Current fees of the Bitcoin network
+              </h2>
               <FeeRatePanel />
             </section>
 
@@ -98,7 +96,7 @@ function App() {
               <h2 className="text-2xl font-bold">Transaction templates</h2>
               <TxTemplatesGrid />
             </section>
-          </div>
+          </main>
         </AppDispatchContext.Provider>
       </AppContext.Provider>
     </>

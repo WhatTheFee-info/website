@@ -1,5 +1,10 @@
 # Dependencies
 node_modules
 
+# Env
+.env
+.env.*
+!.env.template
+
 # Build
 dist
