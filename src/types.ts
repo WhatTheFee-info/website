@@ -52,4 +52,5 @@ export type TxTemplate = {
     minimum: number;
     median: number;
   };
+  tags?: string[];
 };

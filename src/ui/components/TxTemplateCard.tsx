@@ -1,7 +1,6 @@
 import { ReportsSolid } from 'iconoir-react';
 import { TxTemplate } from '../../types';
 import { useAppContext } from '../../AppContext';
-import { useEffect, useState } from 'react';
 
 interface TxTemplateCardProps {
   template: TxTemplate;
@@ -33,34 +32,41 @@ export default function TxTemplateCard({ template }: TxTemplateCardProps) {
   }
 
   return (
-    <div className="flex flex-row rounded border border-slate-300 shadow dark:shadow-slate-300 hover:shadow-lg p-4 m-2">
-      <div className="flex-col m-2">
-        <h4 className="text-left font-bold">{template.name}</h4>
-        <small>{`${template.inputs.length} inputs -> ${template.outputs.length} outputs`}</small>
-        <div className="text-left">{template.sizeVB} vBytes</div>
+    <div className="flex flex-col rounded border border-slate-300 shadow dark:shadow-slate-300 hover:shadow-lg p-4 m-2">
+      <div className="flex flex-row">
+        <div className="flex-col m-2">
+          <h4 className="text-left font-bold">{template.name}</h4>
+          <small>{`${template.inputs.length} inputs -> ${template.outputs.length} outputs`}</small>
+          <div className="text-left">{template.sizeVB} vBytes</div>
+        </div>
+        <div className="flex-col ml-2">
+          <div
+            className="text-nowrap text-right flex flex-row justify-end"
+            title="Next hour"
+          >
+            {calcualteCostAndFormat(template.costSats?.hour)}
+            <ReportsSolid className="text-lime-600" />
+          </div>
+          <div
+            className="text-nowrap text-right flex flex-row justify-end"
+            title="Median (next block)"
+          >
+            {calcualteCostAndFormat(template.costSats?.median)}
+            <ReportsSolid className="text-amber-600" />
+          </div>
+          <div
+            className="text-nowrap text-right flex flex-row justify-end"
+            title="Next block"
+          >
+            {calcualteCostAndFormat(template.costSats?.fastest)}
+            <ReportsSolid className="text-red-600" />
+          </div>
+        </div>
       </div>
-      <div className="flex-col ml-2">
-        <div
-          className="text-nowrap text-right flex flex-row justify-end"
-          title="Next hour"
-        >
-          {calcualteCostAndFormat(template.costSats?.hour)}
-          <ReportsSolid className="text-lime-600" />
-        </div>
-        <div
-          className="text-nowrap text-right flex flex-row justify-end"
-          title="Median (next block)"
-        >
-          {calcualteCostAndFormat(template.costSats?.median)}
-          <ReportsSolid className="text-amber-600" />
-        </div>
-        <div
-          className="text-nowrap text-right flex flex-row justify-end"
-          title="Next block"
-        >
-          {calcualteCostAndFormat(template.costSats?.fastest)}
-          <ReportsSolid className="text-red-600" />
-        </div>
+      <div className="flex-row">
+        {template.tags?.map((tag) => (
+          <span className="rounded-full bg-sky-200 text-sky-950 mx-1 text-xs py-1 px-1.5">{tag}</span>
+        ))}
       </div>
     </div>
   );

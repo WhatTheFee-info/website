@@ -46,10 +46,14 @@ export default function TxTemplatesGrid() {
 
   function filterTemplates() {
     if (searchText) {
-      const filteredTemplates = calculatedTemplates?.filter(
-        (template) =>
-          template.name.toLowerCase().indexOf(searchText.toLowerCase()) >= 0,
-      );
+      const filteredTemplates = calculatedTemplates?.filter((template) => {
+        const searchTextL = searchText.toLowerCase();
+        // search in name and in tags
+        return template.name.toLowerCase().indexOf(searchTextL) >= 0 ||
+          template.tags?.some(
+            (tag) => tag.toLowerCase().indexOf(searchTextL) >= 0,
+          );
+      });
       setFilteredCalculatedTemplates(filteredTemplates);
     } else {
       setFilteredCalculatedTemplates(calculatedTemplates);
