@@ -61,20 +61,23 @@ export default function TxTemplatesGrid() {
   }
 
   return (
-    <div className="flex-1 my-4 md:px-4">
-      {!filteredCalculatedTemplates ||
-      filteredCalculatedTemplates.length == 0 ? (
-        <p>(No transaction templates available)</p>
-      ) : (
-        <>
-          <SearchInput onSearch={handleSearchChange} />
+    <>
+      <SearchInput onSearch={handleSearchChange} />
+      <div className="flex-1 my-4 md:px-4">
+        {!filteredCalculatedTemplates ||
+        filteredCalculatedTemplates.length == 0 ? (
+          <p>
+            (No transaction templates available{' '}
+            {searchText && ` for the term "${searchText}"`})
+          </p>
+        ) : (
           <div className="flex sm:flex-row sm:flex-wrap flex-col">
             {filteredCalculatedTemplates.map((template) => (
               <TxTemplateCard key={template.code} template={template} />
             ))}
           </div>
-        </>
-      )}
-    </div>
+        )}
+      </div>
+    </>
   );
 }
