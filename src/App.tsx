@@ -14,9 +14,7 @@ import {
   EXRATES_FETCH_INTERVAL_SEC,
   FEES_FETCH_INTERVAL_SEC,
 } from './constants';
-import ThemeSwitch from './ui/components/ThemeSwitch';
 import { getExchangeRates } from './services/exchangeRate.service';
-import CurrencySelect from './ui/components/CurrencySelect';
 import SiteHeader from './ui/components/SiteHeader';
 
 function App() {
