@@ -4,6 +4,7 @@ import { calcaulteSize } from '../../services/transaction.service';
 import definedTemplates from '../../templates';
 import TxTemplateCard from './TxTemplateCard';
 import { useAppContext } from '../../AppContext';
+import SearchInput from './SearchInput';
 
 export default function TxTemplatesGrid() {
   const {
@@ -11,6 +12,9 @@ export default function TxTemplatesGrid() {
   } = useAppContext();
   const [calculatedTemplates, setCalculatedTemplates] =
     useState<TxTemplate[]>();
+  const [filteredCalculatedTemplates, setFilteredCalculatedTemplates] =
+    useState<TxTemplate[]>();
+  const [searchText, setSearchText] = useState<string>();
 
   function calculateTemplatesCosts() {
     console.debug('Calculating size and cost...');
@@ -36,16 +40,40 @@ export default function TxTemplatesGrid() {
     calculateTemplatesCosts();
   }, [feeStats]);
 
+  useEffect(() => {
+    filterTemplates();
+  }, [searchText, calculatedTemplates]);
+
+  function filterTemplates() {
+    if (searchText) {
+      const filteredTemplates = calculatedTemplates?.filter(
+        (template) =>
+          template.name.toLowerCase().indexOf(searchText.toLowerCase()) >= 0,
+      );
+      setFilteredCalculatedTemplates(filteredTemplates);
+    } else {
+      setFilteredCalculatedTemplates(calculatedTemplates);
+    }
+  }
+
+  function handleSearchChange(text: string) {
+    setSearchText(text);
+  }
+
   return (
     <div className="flex-1 my-4 md:px-4">
-      {!calculatedTemplates || calculatedTemplates.length == 0 ? (
+      {!filteredCalculatedTemplates ||
+      filteredCalculatedTemplates.length == 0 ? (
         <p>(No transaction templates available)</p>
       ) : (
-        <div className="flex sm:flex-row sm:flex-wrap flex-col">
-          {calculatedTemplates.map((template) => (
-            <TxTemplateCard key={template.code} template={template} />
-          ))}
-        </div>
+        <>
+          <SearchInput onSearch={handleSearchChange} />
+          <div className="flex sm:flex-row sm:flex-wrap flex-col">
+            {filteredCalculatedTemplates.map((template) => (
+              <TxTemplateCard key={template.code} template={template} />
+            ))}
+          </div>
+        </>
       )}
     </div>
   );
