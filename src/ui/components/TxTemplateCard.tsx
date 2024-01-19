@@ -12,15 +12,24 @@ export default function TxTemplateCard({ template }: TxTemplateCardProps) {
     state: { exRates, selectedCurrency },
   } = useAppContext();
 
-  function calcualteCost(costInSats?: number) {
+  function calcualteCostAndFormat(costInSats?: number) {
     let cost = costInSats;
+    let costFormatted = cost?.toFixed(2);
     if (exRates) {
-      cost =
-        (template.costSats?.hour ?? 0) * exRates[selectedCurrency ?? 'BTC'];
-      // now divide to convert sats to BTC
-      cost = cost / 100000000;
+      cost = (costInSats ?? 0) * exRates[selectedCurrency ?? 'BTC'];
+
+      if (selectedCurrency != 'BTC') {
+        // now divide to convert sats to BTC
+        cost = cost / 100000000;
+        costFormatted = new Intl.NumberFormat().format(cost);
+        costFormatted += ` ${selectedCurrency}`;
+      } else {
+        // if BTC display in sats
+        costFormatted = cost.toString();
+        costFormatted += ` sats`;
+      }
     }
-    return cost?.toFixed(2);
+    return costFormatted;
   }
 
   return (
@@ -35,21 +44,21 @@ export default function TxTemplateCard({ template }: TxTemplateCardProps) {
           className="text-nowrap text-right flex flex-row justify-end"
           title="Next hour"
         >
-          {calcualteCost(template.costSats?.hour)} {selectedCurrency}
+          {calcualteCostAndFormat(template.costSats?.hour)}
           <ReportsSolid className="text-lime-600" />
         </div>
         <div
           className="text-nowrap text-right flex flex-row justify-end"
           title="Median (next block)"
         >
-          {calcualteCost(template.costSats?.halfHour)} {selectedCurrency}
+          {calcualteCostAndFormat(template.costSats?.median)}
           <ReportsSolid className="text-amber-600" />
         </div>
         <div
           className="text-nowrap text-right flex flex-row justify-end"
           title="Next block"
         >
-          {calcualteCost(template.costSats?.fastest)} {selectedCurrency}
+          {calcualteCostAndFormat(template.costSats?.fastest)}
           <ReportsSolid className="text-red-600" />
         </div>
       </div>
