@@ -61,9 +61,9 @@ export default function TxTemplatesGrid() {
   }
 
   return (
-    <>
+    <div className="flex-1 my-4 md:px-4">
       <SearchInput onSearch={handleSearchChange} />
-      <div className="flex-1 my-4 md:px-4">
+      <div className="flex-1">
         {!filteredCalculatedTemplates ||
         filteredCalculatedTemplates.length == 0 ? (
           <p>
@@ -78,6 +78,6 @@ export default function TxTemplatesGrid() {
           </div>
         )}
       </div>
-    </>
+    </div>
   );
 }
