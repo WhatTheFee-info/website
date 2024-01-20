@@ -80,10 +80,10 @@ export function calcaulteSize(txTemplate: TxTemplate): number {
       case TxOutputType.P2WPKH:
         totalSize += 22;
         break;
-      case TxOutputType.P2SH_2o3:
+      case TxOutputType.P2SH:
         totalSize += 23;
         break;
-      case TxOutputType.P2WSH_2o3:
+      case TxOutputType.P2WSH:
         totalSize += 34;
         break;
       case TxOutputType.P2TR:

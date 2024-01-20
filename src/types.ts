@@ -27,8 +27,8 @@ export enum TxInputType {
 export enum TxOutputType {
   P2PKH = 'p2pkh',
   P2WPKH = 'p2wpkh',
-  P2SH_2o3 = 'p2sh_2o3',
-  P2WSH_2o3 = 'p2wsh_2o3',
+  P2SH = 'p2sh',
+  P2WSH = 'p2wsh',
   P2TR = 'p2tr',
 }
 

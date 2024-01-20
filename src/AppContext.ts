@@ -14,6 +14,7 @@ export const initialState: IAppState = {
   theme: Theme.light,
   feeStats: undefined,
   feesLastFetchedAt: undefined,
+  selectedCurrency: 'BTC',
 };
 
 export interface IAppContext {

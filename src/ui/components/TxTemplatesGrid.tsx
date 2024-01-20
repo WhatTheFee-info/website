@@ -49,10 +49,12 @@ export default function TxTemplatesGrid() {
       const filteredTemplates = calculatedTemplates?.filter((template) => {
         const searchTextL = searchText.toLowerCase();
         // search in name and in tags
-        return template.name.toLowerCase().indexOf(searchTextL) >= 0 ||
+        return (
+          template.name.toLowerCase().indexOf(searchTextL) >= 0 ||
           template.tags?.some(
             (tag) => tag.toLowerCase().indexOf(searchTextL) >= 0,
-          );
+          )
+        );
       });
       setFilteredCalculatedTemplates(filteredTemplates);
     } else {
@@ -66,7 +68,9 @@ export default function TxTemplatesGrid() {
 
   return (
     <div className="flex-1 my-4 md:px-4">
-      <SearchInput onSearch={handleSearchChange} />
+      <div className="flex-row">
+        <SearchInput onSearch={handleSearchChange} /> 
+      </div>
       <div className="flex-1">
         {!filteredCalculatedTemplates ||
         filteredCalculatedTemplates.length == 0 ? (
