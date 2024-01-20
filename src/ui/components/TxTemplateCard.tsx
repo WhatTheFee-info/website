@@ -46,7 +46,7 @@ export default function TxTemplateCard({ template }: TxTemplateCardProps) {
         <div className="flex-col ml-2">
           <div
             className="text-nowrap flex-nowrap text-right flex flex-row justify-end"
-            title="Median for next block)"
+            title="Median for next block"
           >
             {calcualteCostAndFormat(template.costSats?.median)}
             <ReportsSolid className="text-red-600" />

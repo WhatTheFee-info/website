@@ -36,7 +36,7 @@ export default function ThemeSwitch() {
       <div
         className="w-12 h-6 rounded-full ring-0 peer duration-500 
             outline-none bg-gray-200 overflow-hidden 
-            shadow-md shadow-gray-400 
+            shadow shadow-gray-400 
 
             before:flex before:items-center before:justify-center 
             before:content-['☀️'] before:absolute before:h-5 before:w-5 before:top-1/2 
