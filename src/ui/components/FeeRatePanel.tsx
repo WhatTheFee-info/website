@@ -12,13 +12,13 @@ export default function FeeRatePanel() {
         <>
           <FeeRateCard
             title="Median for next block 🥵🏃"
-            level="medium"
-            feeRateSatVb={Math.round(feeStats.medianNextBlock * 100) / 100}
+            level="high"
+            feeRateSatVb={feeStats.fastestFee}
           />
           <FeeRateCard
             title="Minimum for next block 😯🚶"
-            level="high"
-            feeRateSatVb={feeStats.fastestFee}
+            level="medium"
+            feeRateSatVb={Math.round(feeStats.minimumNextBlock * 100) / 100}
           />
           <FeeRateCard
             title="Next hour ☕🧉"

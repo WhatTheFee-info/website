@@ -32,5 +32,6 @@ export async function getFeeStats(): Promise<FeesStats> {
   return {
     ...recommendedFees,
     medianNextBlock: mempoolBlockFees[0].medianFee,
+    minimumNextBlock: mempoolBlockFees[0].feeRange[0],
   };
 }

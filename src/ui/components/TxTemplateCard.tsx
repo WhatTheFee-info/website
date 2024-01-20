@@ -46,30 +46,33 @@ export default function TxTemplateCard({ template }: TxTemplateCardProps) {
         <div className="flex-col ml-2">
           <div
             className="text-nowrap flex-nowrap text-right flex flex-row justify-end"
+            title="Median for next block)"
+          >
+            {calcualteCostAndFormat(template.costSats?.median)}
+            <ReportsSolid className="text-red-600" />
+          </div>
+          <div
+            className="text-nowrap flex-nowrap text-right flex flex-row justify-end"
+            title="Minimum for next block"
+          >
+            {calcualteCostAndFormat(template.costSats?.fastest)}
+            <ReportsSolid className="text-amber-600" />
+          </div>
+          <div
+            className="text-nowrap flex-nowrap text-right flex flex-row justify-end"
             title="Next hour"
           >
             {calcualteCostAndFormat(template.costSats?.hour)}
             <ReportsSolid className="text-lime-600" />
           </div>
-          <div
-            className="text-nowrap flex-nowrap text-right flex flex-row justify-end"
-            title="Median (next block)"
-          >
-            {calcualteCostAndFormat(template.costSats?.median)}
-            <ReportsSolid className="text-amber-600" />
-          </div>
-          <div
-            className="text-nowrap flex-nowrap text-right flex flex-row justify-end"
-            title="Next block"
-          >
-            {calcualteCostAndFormat(template.costSats?.fastest)}
-            <ReportsSolid className="text-red-600" />
-          </div>
         </div>
       </div>
       <div className="flex-row">
         {template.tags?.map((tag) => (
-          <span className="rounded-full bg-sky-200 text-sky-950 mx-1 text-xs py-1 px-1.5">
+          <span
+            key={tag}
+            className="rounded-full bg-sky-200 text-sky-950 mx-1 text-xs py-1 px-1.5"
+          >
             {tag}
           </span>
         ))}

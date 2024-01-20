@@ -10,6 +10,7 @@ export interface FeesStats {
   economyFee: number;
   minimumFee: number;
   medianNextBlock: number;
+  minimumNextBlock: number;
 }
 
 export interface ExchangeRates {
