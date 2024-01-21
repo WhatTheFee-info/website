@@ -33,7 +33,7 @@ function App() {
       }
     }
 
-    // load the recommended fees
+    // load the recommended fees from API
     getFeeStats()
       .then((feeStats) => {
         dispatch({

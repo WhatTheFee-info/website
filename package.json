@@ -12,6 +12,7 @@
   },
   "homepage": "https://whatthefee-info.github.io/wtfee-website",
   "dependencies": {
+    "date-fns": "^3.3.0",
     "iconoir-react": "^7.3.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
