@@ -2,10 +2,10 @@ import { useEffect, useState } from 'react';
 import { TxTemplate } from '../../types';
 import { calcaulteSize } from '../../services/transaction.service';
 import definedTemplates from '../../templates';
-import TxTemplateCard from './TxTemplateCard';
+import TxTemplateCard, { TxTemplaceCardMode } from './TxTemplateCard';
 import { useAppContext } from '../../AppContext';
 import SearchInput from './SearchInput';
-import { SortDown, SortUp, Xmark } from 'iconoir-react';
+import { SortDown, SortUp, TableRows, ViewGrid, Xmark } from 'iconoir-react';
 import Button from './Button';
 
 enum SortField {
@@ -30,6 +30,9 @@ export default function TxTemplatesGrid() {
   const [sortingDirection, setSortingDirection] = useState<SortDirection>(
     SortDirection.asc,
   );
+  const [gridMode, setGridMode] = useState<TxTemplaceCardMode>(
+    TxTemplaceCardMode.card,
+  );
 
   function calculateTemplatesCosts() {
     console.debug('Calculating size and cost...');
@@ -45,7 +48,12 @@ export default function TxTemplatesGrid() {
         hour: Math.ceil(template.sizeVB * (feeStats?.hourFee ?? 0)),
         halfHour: Math.ceil(template.sizeVB * (feeStats?.halfHourFee ?? 0)),
         fastest: Math.ceil(template.sizeVB * (feeStats?.fastestFee ?? 0)),
-        median: Math.ceil(template.sizeVB * (feeStats?.medianNextBlock ?? 0)),
+        medianNextBlock: Math.ceil(
+          template.sizeVB * (feeStats?.medianNextBlock ?? 0),
+        ),
+        minimumNextBlock: Math.ceil(
+          template.sizeVB * (feeStats?.minimumNextBlock ?? 0),
+        ),
       };
     }
     setCalculatedTemplates(calculatedTemplates);
@@ -129,6 +137,13 @@ export default function TxTemplatesGrid() {
     setSortingField(SortField.none);
   }
 
+  function handleViewModeCardClick() {
+    setGridMode(TxTemplaceCardMode.card);
+  }
+  function handleViewModeRowClick() {
+    setGridMode(TxTemplaceCardMode.row);
+  }
+
   //#endregion Handle functions
 
   return (
@@ -169,6 +184,16 @@ export default function TxTemplatesGrid() {
           >
             <Xmark />
           </Button>
+          <Button
+            onClick={handleViewModeCardClick}
+            className="ms-2"
+            title="Tile / Grid view"
+          >
+            <ViewGrid />
+          </Button>
+          <Button onClick={handleViewModeRowClick} title="Table view">
+            <TableRows />
+          </Button>
         </div>
       </div>
       <div className="flex-1">
@@ -180,7 +205,11 @@ export default function TxTemplatesGrid() {
         ) : (
           <div className="flex sm:flex-row sm:flex-wrap flex-col">
             {finalTemplates.map((template) => (
-              <TxTemplateCard key={template.code} template={template} />
+              <TxTemplateCard
+                key={template.code}
+                template={template}
+                mode={gridMode}
+              />
             ))}
           </div>
         )}

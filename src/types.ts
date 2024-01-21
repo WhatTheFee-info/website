@@ -51,7 +51,8 @@ export type TxTemplate = {
     hour: number;
     economy: number;
     minimum: number;
-    median: number;
+    medianNextBlock: number;
+    minimumNextBlock: number;
   };
   tags?: string[];
 };

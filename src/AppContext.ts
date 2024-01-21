@@ -14,7 +14,8 @@ export const initialState: IAppState = {
   theme: Theme.light,
   feeStats: undefined,
   feesLastFetchedAt: undefined,
-  selectedCurrency: 'BTC',
+  exRates: { BTC: 1 }, // default to only having BTC
+  selectedCurrency: 'BTC', // default to BTC
 };
 
 export interface IAppContext {
