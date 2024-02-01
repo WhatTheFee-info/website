@@ -5,7 +5,16 @@ import definedTemplates from '../../templates';
 import TxTemplateCard, { TxTemplaceCardMode } from './TxTemplateCard';
 import { useAppContext } from '../../AppContext';
 import SearchInput from './SearchInput';
-import { SortDown, SortUp, TableRows, ViewGrid, Xmark } from 'iconoir-react';
+import {
+  InfoCircle,
+  ReportsSolid,
+  SortDown,
+  SortUp,
+  TableRows,
+  ViewGrid,
+  WarningCircleSolid,
+  Xmark,
+} from 'iconoir-react';
 import Button from './Button';
 
 enum SortField {
@@ -22,6 +31,8 @@ export default function TxTemplatesGrid() {
   const {
     state: { feeStats },
   } = useAppContext();
+
+  const [showInfoBox, setShowInfoBox] = useState<boolean>(false);
   const [calculatedTemplates, setCalculatedTemplates] =
     useState<TxTemplate[]>();
   const [finalTemplates, setFinalTemplates] = useState<TxTemplate[]>();
@@ -31,7 +42,7 @@ export default function TxTemplatesGrid() {
     SortDirection.asc,
   );
   const [gridMode, setGridMode] = useState<TxTemplaceCardMode>(
-    TxTemplaceCardMode.card,
+    TxTemplaceCardMode.row,
   );
 
   function calculateTemplatesCosts() {
@@ -107,6 +118,10 @@ export default function TxTemplatesGrid() {
 
   //#region Handle functions
 
+  function handleInfoBoxButtonClick() {
+    setShowInfoBox(!showInfoBox);
+  }
+
   function handleSearchChange(text: string) {
     setSearchText(text);
   }
@@ -148,6 +163,39 @@ export default function TxTemplatesGrid() {
 
   return (
     <div className="flex-1 my-4 md:px-4">
+      <h2 className="text-2xl font-bold">
+        Transaction templates
+        <InfoCircle
+          className="text-sky-500 inline-block ms-1 cursor-pointer"
+          width="1em"
+          height="1em"
+          onClick={handleInfoBoxButtonClick}
+        />
+      </h2>
+      {showInfoBox && (
+        <div
+          id="info-help"
+          className="flex-1 p-2 text-sm bg-sky-100 mb-2
+          border border-solid border-sky-400 rounded"
+        >
+          <span className="flex flex-row">
+            <ReportsSolid className="text-lime-600 me-1" />
+            Sats to spend for the fees to be up to 0.1%
+          </span>
+          <span className="flex flex-row">
+            <ReportsSolid className="text-amber-600 me-1" />
+            Sats to spend for the fees to be up to 1%
+          </span>
+          <span className="flex flex-row">
+            <ReportsSolid className="text-red-600 me-1" />
+            Sats to spend for the fees to be 5%
+          </span>
+          <span className="flex flex-row">
+            <WarningCircleSolid className="text-red-600 me-1" />
+            Sats to spend for the fees to be more than 5%
+          </span>
+        </div>
+      )}
       <div className="flex flex-col md:flex-row">
         <div className="grow">
           <SearchInput onSearch={handleSearchChange} />

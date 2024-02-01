@@ -91,7 +91,6 @@ function App() {
             </section>
 
             <section id="tx-templates" className="mb-8">
-              <h2 className="text-2xl font-bold">Transaction templates</h2>
               <TxTemplatesGrid />
             </section>
           </main>
