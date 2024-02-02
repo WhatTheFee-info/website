@@ -1,5 +1,11 @@
-import React, { createContext, useContext } from 'react';
+import React, { createContext, useContext, useState } from 'react';
 import { ExchangeRates, FeesStats, Theme } from './types';
+import {
+  EXRATES_FETCH_INTERVAL_SEC,
+  FEES_FETCH_INTERVAL_SEC,
+} from './constants';
+import * as feeService from './services/fee.service';
+import * as exchangeRateService from './services/exchangeRate.service';
 
 export interface IAppState {
   theme: Theme;
@@ -29,8 +35,8 @@ export interface IAppContext {
 
 export enum ActionType {
   CHANGE_THEME = 'CHANGE_THEME',
-  SET_FEES_STATS = 'SET_FEES_STATS',
-  SET_EX_RATES = 'SET_EX_RATES',
+  FETCH_FEE_RATES = 'FETCH_FEE_RATES',
+  FETCH_EX_RATES = 'FETCH_EX_RATES',
   SET_SELECTED_CURRENCY = 'SET_SELECTED_CURRENCY',
   SET_SELECTED_FEERATE = 'SET_SELECTED_FEERATE',
 }
@@ -42,7 +48,10 @@ export type IAction = {
   selectedCurrency?: string;
   selectedFeeRate?: string;
 };
-export function appReducer(prevState: IAppState, action: IAction): IAppState {
+export async function appReducer(
+  prevState: IAppState,
+  action: IAction,
+): Promise<IAppState> {
   console.debug(`appReducer called: ${action.type}`);
 
   switch (action.type) {
@@ -51,18 +60,28 @@ export function appReducer(prevState: IAppState, action: IAction): IAppState {
         ...prevState,
         theme: action.theme ?? Theme.light,
       };
-    case ActionType.SET_FEES_STATS:
-      return {
-        ...prevState,
-        feeStats: action.fees,
-        feesLastFetchedAt: new Date(),
-      };
-    case ActionType.SET_EX_RATES:
-      return {
-        ...prevState,
-        exRates: action.exRates,
-        exRatesLastFetchedAt: new Date(),
-      };
+    case ActionType.FETCH_FEE_RATES:
+      const feeStats = await fetchFeesStats(prevState);
+      if (feeStats) {
+        return {
+          ...prevState,
+          feeStats: feeStats,
+          feesLastFetchedAt: new Date(),
+        };
+      } else {
+        return prevState;
+      }
+    case ActionType.FETCH_EX_RATES:
+      const exRates = await fetchExchangeRates(prevState);
+      if (exRates) {
+        return {
+          ...prevState,
+          exRates: exRates,
+          exRatesLastFetchedAt: new Date(),
+        };
+      } else {
+        return prevState;
+      }
     case ActionType.SET_SELECTED_CURRENCY:
       return {
         ...prevState,
@@ -76,6 +95,60 @@ export function appReducer(prevState: IAppState, action: IAction): IAppState {
     default:
       throw Error(`App reducer - Unknown action: ${action.type}`);
   }
+}
+
+export function useAsyncReducer(
+  reducer: typeof appReducer,
+  initState: IAppState = initialState,
+): [IAppState, (action: IAction) => Promise<void>] {
+  const [state, setState] = useState(initState);
+
+  const dispatch = async (action: IAction) => {
+    const result = reducer(state, action);
+    try {
+      const newState = await result;
+      setState(newState);
+    } catch (err) {
+      console.error('Error running reducer on async dispatch.');
+      // setState({ ...state, error: err });
+    }
+  };
+
+  return [state, dispatch];
+}
+
+async function fetchFeesStats(state: IAppState) {
+  // only fetch if not fetched fro FEES_FETCH_INTERVAL_SEC seconds
+  if (state.feeStats && state.feesLastFetchedAt) {
+    const secondsFromLastFetch =
+      (new Date().getTime() - state.feesLastFetchedAt.getTime()) / 1000;
+    if (secondsFromLastFetch < FEES_FETCH_INTERVAL_SEC) {
+      console.debug(
+        `Already fetched fees ${secondsFromLastFetch} seconds ago.`,
+      );
+      return undefined;
+    }
+  }
+
+  // load the recommended fees from API
+  return feeService.getFeeStats();
+}
+
+function fetchExchangeRates(state: IAppState) {
+  // only fetch if not fetched fro EXRATES_FETCH_INTERVAL_SEC seconds
+  if (state.exRates && state.exRatesLastFetchedAt) {
+    const secondsFromLastFetch =
+      (new Date().getTime() - state.exRatesLastFetchedAt.getTime()) / 1000;
+    if (secondsFromLastFetch < EXRATES_FETCH_INTERVAL_SEC) {
+      console.debug(
+        `Already fetched exchange rates ${secondsFromLastFetch} seconds ago.`,
+      );
+      return undefined;
+    }
+  }
+
+  // load the recommended fees
+  return exchangeRateService.getExchangeRates();
 }
 
 //#endregion ------ Reducers ------
