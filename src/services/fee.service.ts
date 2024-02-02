@@ -30,7 +30,11 @@ export async function getFeeStats(): Promise<FeesStats> {
     '/fees/mempool-blocks',
   );
   return {
-    ...recommendedFees,
+    fastest: recommendedFees.fastestFee,
+    economy: recommendedFees.economyFee,
+    halfHour: recommendedFees.halfHourFee,
+    hour: recommendedFees.hourFee,
+    minimum: recommendedFees.minimumFee,
     medianNextBlock: mempoolBlockFees[0].medianFee,
     minimumNextBlock: mempoolBlockFees[0].feeRange[0],
   };

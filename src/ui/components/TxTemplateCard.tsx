@@ -22,7 +22,7 @@ export default function TxTemplateCard({
   mode = TxTemplaceCardMode.card,
 }: TxTemplateCardProps) {
   const {
-    state: { exRates, selectedCurrency },
+    state: { exRates, selectedCurrency, selectedFeeRate },
   } = useAppContext();
 
   const fiatNumberFormatter = new Intl.NumberFormat(undefined, {
@@ -35,7 +35,9 @@ export default function TxTemplateCard({
   });
 
   function calculateSatsForFeePercent(percentMax: number) {
-    let minSatsToSpend = (template.costSats?.medianNextBlock ?? 0) / percentMax;
+    let minSatsToSpend =
+      ((template.costSats && template.costSats[selectedFeeRate]) ?? 0) /
+      percentMax;
     minSatsToSpend = Math.ceil(minSatsToSpend);
 
     return satsNumberFormatter.format(minSatsToSpend);
@@ -120,7 +122,7 @@ export default function TxTemplateCard({
                     ${mode == TxTemplaceCardMode.card ? '' : 'ms-4'}`}
               title="Spend up to 5% in fees"
             >
-              &lt; {calculateSatsForFeePercent(0.05)}
+              {calculateSatsForFeePercent(1)}
               <WarningCircleSolid className="text-red-600 ms-1" />
             </div>
           </div>

@@ -1,14 +1,29 @@
+import { CheckCircle, CheckCircleSolid } from 'iconoir-react';
+import { ActionType, IAppState, useAppContext } from '../../AppContext';
+
 interface FeeRateCardProps {
   title: string;
   level?: 'no-priority' | 'low' | 'medium' | 'high';
-  feeRateSatVb: number;
+  feeRateCode: IAppState['selectedFeeRate'];
 }
 
 export default function FeeRateCard({
   title,
-  feeRateSatVb,
+  feeRateCode,
   level,
 }: FeeRateCardProps) {
+  const {
+    state: { feeStats, selectedFeeRate },
+    dispatch,
+  } = useAppContext();
+
+  function handleCardClick() {
+    dispatch({
+      type: ActionType.SET_SELECTED_FEERATE,
+      selectedFeeRate: feeRateCode,
+    });
+  }
+
   let bgClass =
     'from-slate-200 to-slage-400 dark:from-slate-600 dark:to-slage-800';
   let borderClas = 'border-slage-300 dark:border-slage-600';
@@ -31,12 +46,18 @@ export default function FeeRateCard({
 
   return (
     <div
-      className={`flex-1 text-center text-slate-800 rounded border shadow 
+      className={`group flex-1 text-center text-slate-800 rounded border shadow relative
           dark:text-slate-200
-            p-6 m-3 bg-gradient-to-tr ${bgClass} ${borderClas}`}
+          cursor-pointer p-6 m-3 bg-gradient-to-tr ${bgClass} ${borderClas}`}
+      onClick={handleCardClick}
     >
+      {feeRateCode == selectedFeeRate ? (
+        <CheckCircleSolid className="absolute top-2 left-2" />
+      ) : (
+        <CheckCircle className="absolute top-2 left-2 hidden group-hover:block" />
+      )}
       <h4 className="font-bold text-nowrap">{title}</h4>
-      <div>{feeRateSatVb} sat/vB</div>
+      <div>{feeStats && Math.round(feeStats[feeRateCode])} sat/vB</div>
     </div>
   );
 }

@@ -4,11 +4,11 @@ export enum Theme {
 }
 
 export interface FeesStats {
-  fastestFee: number;
-  halfHourFee: number;
-  hourFee: number;
-  economyFee: number;
-  minimumFee: number;
+  fastest: number;
+  halfHour: number;
+  hour: number;
+  economy: number;
+  minimum: number;
   medianNextBlock: number;
   minimumNextBlock: number;
 }

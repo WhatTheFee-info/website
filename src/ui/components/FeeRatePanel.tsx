@@ -15,17 +15,17 @@ export default function FeeRatePanel() {
             <FeeRateCard
               title="Median for next block 🥵🏃"
               level="high"
-              feeRateSatVb={feeStats.fastestFee}
+              feeRateCode={'medianNextBlock'}
             />
             <FeeRateCard
               title="Minimum for next block 😯🚶"
               level="medium"
-              feeRateSatVb={Math.round(feeStats.minimumNextBlock * 100) / 100}
+              feeRateCode={'minimumNextBlock'}
             />
             <FeeRateCard
               title="Next hour ☕🧉"
               level="low"
-              feeRateSatVb={feeStats.hourFee}
+              feeRateCode={'hour'}
             />
           </div>
           {feesLastFetchedAt && (

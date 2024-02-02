@@ -8,6 +8,7 @@ export interface IAppState {
   exRates?: ExchangeRates;
   exRatesLastFetchedAt?: Date;
   selectedCurrency?: string;
+  selectedFeeRate: 'medianNextBlock' | 'minimumNextBlock' | 'hour';
 }
 
 export const initialState: IAppState = {
@@ -16,6 +17,7 @@ export const initialState: IAppState = {
   feesLastFetchedAt: undefined,
   exRates: { BTC: 1 }, // default to only having BTC
   selectedCurrency: 'BTC', // default to BTC
+  selectedFeeRate: 'medianNextBlock',
 };
 
 export interface IAppContext {
@@ -30,6 +32,7 @@ export enum ActionType {
   SET_FEES_STATS = 'SET_FEES_STATS',
   SET_EX_RATES = 'SET_EX_RATES',
   SET_SELECTED_CURRENCY = 'SET_SELECTED_CURRENCY',
+  SET_SELECTED_FEERATE = 'SET_SELECTED_FEERATE',
 }
 export type IAction = {
   type: ActionType;
@@ -37,6 +40,7 @@ export type IAction = {
   fees?: FeesStats;
   exRates?: ExchangeRates;
   selectedCurrency?: string;
+  selectedFeeRate?: string;
 };
 export function appReducer(prevState: IAppState, action: IAction): IAppState {
   console.debug(`appReducer called: ${action.type}`);
@@ -63,6 +67,11 @@ export function appReducer(prevState: IAppState, action: IAction): IAppState {
       return {
         ...prevState,
         selectedCurrency: action.selectedCurrency,
+      };
+    case ActionType.SET_SELECTED_FEERATE:
+      return {
+        ...prevState,
+        selectedFeeRate: action.selectedFeeRate as IAppState['selectedFeeRate'],
       };
     default:
       throw Error(`App reducer - Unknown action: ${action.type}`);

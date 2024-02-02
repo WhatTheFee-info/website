@@ -54,11 +54,11 @@ export default function TxTemplatesGrid() {
       template.sizeVB = calcaulteSize(template);
       // now calculate cost (use Math.ceil to round up sats amoung)
       template.costSats = {
-        economy: Math.ceil(template.sizeVB * (feeStats?.economyFee ?? 0)),
-        minimum: Math.ceil(template.sizeVB * (feeStats?.minimumFee ?? 0)),
-        hour: Math.ceil(template.sizeVB * (feeStats?.hourFee ?? 0)),
-        halfHour: Math.ceil(template.sizeVB * (feeStats?.halfHourFee ?? 0)),
-        fastest: Math.ceil(template.sizeVB * (feeStats?.fastestFee ?? 0)),
+        economy: Math.ceil(template.sizeVB * (feeStats?.economy ?? 0)),
+        minimum: Math.ceil(template.sizeVB * (feeStats?.minimum ?? 0)),
+        hour: Math.ceil(template.sizeVB * (feeStats?.hour ?? 0)),
+        halfHour: Math.ceil(template.sizeVB * (feeStats?.halfHour ?? 0)),
+        fastest: Math.ceil(template.sizeVB * (feeStats?.fastest ?? 0)),
         medianNextBlock: Math.ceil(
           template.sizeVB * (feeStats?.medianNextBlock ?? 0),
         ),
@@ -192,7 +192,7 @@ export default function TxTemplatesGrid() {
           </span>
           <span className="flex flex-row">
             <WarningCircleSolid className="text-red-600 me-1" />
-            Sats to spend for the fees to be more than 5%
+            Sats to spend to make the transaction uneconomic
           </span>
         </div>
       )}
