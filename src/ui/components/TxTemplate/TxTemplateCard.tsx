@@ -72,7 +72,6 @@ export default function TxTemplateCard({
               template={template}
               mode={mode}
               percent={0.01}
-              title="Spend up to 0.1% in fees"
               icon={<ReportsSolid className="text-amber-600 ms-1" />}
             />
             <TxTemplateCardMinSatsFee

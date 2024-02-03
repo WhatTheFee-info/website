@@ -163,7 +163,7 @@ export default function TxTemplatesGrid() {
   //#endregion Handle functions
 
   return (
-    <div className="flex-1 my-4 md:px-4">
+    <div className="flex-1 my-4">
       <h2 className="text-2xl font-bold">
         Transaction templates
         <InfoCircle

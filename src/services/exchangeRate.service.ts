@@ -14,9 +14,10 @@ interface ExRatesCurrency {
 const apiClient = new APIClient(YADIO_API_BASE_URL);
 
 export async function getExchangeRates() {
-  console.log('Getting the exchange rates...');
+  console.debug('Getting the exchange rates...');
   // we get for BTC (hardcoded)
   const rates = await apiClient.get<ExRatesCurrency>('/exrates/BTC');
+  console.debug('Fetched the exchange rates.');
 
   return rates.BTC;
 }
