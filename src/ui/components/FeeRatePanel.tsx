@@ -35,8 +35,8 @@ export default function FeeRatePanel() {
           )}
         </>
       ) : (
-        <div className="text-center p-6 border w-full bg-slate-0">
-          (No fees obtained)
+        <div className="text-center p-6 border rounded shadow w-full bg-slate-0">
+          (No fees rates obtained)
         </div>
       )}
     </div>
