@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
-import { TxTemplate } from '../../types';
-import { calcaulteSize } from '../../services/transaction.service';
-import definedTemplates from '../../templates';
-import TxTemplateCard, { TxTemplaceCardMode } from './TxTemplateCard';
-import { useAppContext } from '../../AppContext';
-import SearchInput from './SearchInput';
+import { TxTemplate } from '../../../types';
+import { calcaulteSize } from '../../../services/transaction.service';
+import definedTemplates from '../../../templates';
+import TxTemplateCard from './TxTemplateCard';
+import { useAppContext } from '../../../AppContext';
+import SearchInput from '../SearchInput';
 import {
   InfoCircle,
   ReportsSolid,
@@ -15,7 +15,8 @@ import {
   WarningCircleSolid,
   Xmark,
 } from 'iconoir-react';
-import Button from './Button';
+import Button from '../Button';
+import { TxTemplateCardMode } from './types';
 
 enum SortField {
   name = 'name',
@@ -41,8 +42,8 @@ export default function TxTemplatesGrid() {
   const [sortingDirection, setSortingDirection] = useState<SortDirection>(
     SortDirection.asc,
   );
-  const [gridMode, setGridMode] = useState<TxTemplaceCardMode>(
-    TxTemplaceCardMode.row,
+  const [gridMode, setGridMode] = useState<TxTemplateCardMode>(
+    TxTemplateCardMode.row,
   );
 
   function calculateTemplatesCosts() {
@@ -153,10 +154,10 @@ export default function TxTemplatesGrid() {
   }
 
   function handleViewModeCardClick() {
-    setGridMode(TxTemplaceCardMode.card);
+    setGridMode(TxTemplateCardMode.card);
   }
   function handleViewModeRowClick() {
-    setGridMode(TxTemplaceCardMode.row);
+    setGridMode(TxTemplateCardMode.row);
   }
 
   //#endregion Handle functions

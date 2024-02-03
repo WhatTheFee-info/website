@@ -19,7 +19,7 @@ export interface IAppState {
 }
 
 enum LocalStorageKeys {
-  APP_STATE = 'LS_APP_STATE',
+  APP_STATE = 'APP_STATE',
 }
 
 function convertToPersistState(state: IAppState) {

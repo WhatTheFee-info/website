@@ -39,3 +39,13 @@ export async function getFeeStats(): Promise<FeesStats> {
     minimumNextBlock: mempoolBlockFees[0].feeRange[0],
   };
 }
+
+export function calculateSatsForFeePercent(
+  txCostStats: number,
+  percentMax: number,
+) {
+  let minSatsToSpend = (txCostStats ?? 0) / percentMax;
+  minSatsToSpend = Math.ceil(minSatsToSpend);
+
+  return minSatsToSpend;
+}
