@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { ActionType, useAppContext } from '../../AppContext';
 import { Theme } from '../../types';
 
@@ -8,7 +9,6 @@ export default function ThemeSwitch() {
   } = useAppContext();
 
   function handleOnChange(event: React.ChangeEvent<HTMLInputElement>) {
-    console.log('event', event.target.value);
     let newTheme: Theme = Theme.light;
     if (theme == Theme.light) {
       newTheme = Theme.dark;
@@ -17,19 +17,22 @@ export default function ThemeSwitch() {
       type: ActionType.CHANGE_THEME,
       theme: newTheme,
     });
+  }
+
+  useEffect(() => {
     // now change the class in the <html> element
-    if (newTheme == Theme.dark) {
+    if (theme == Theme.dark) {
       document.documentElement.classList.add('dark');
     } else {
       document.documentElement.classList.remove('dark');
     }
-  }
+  }, [theme]);
 
   return (
     <label className="relative inline-flex items-center cursor-pointer">
       <input
         className="sr-only peer"
-        value={theme}
+        checked={theme == Theme.dark}
         type="checkbox"
         onChange={handleOnChange}
       />

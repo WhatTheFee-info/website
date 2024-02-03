@@ -16,10 +16,23 @@ export function saveValueDate(key: string, value: Date) {
   localStorage.setItem(key, value.getTime().toString());
 }
 
-export function getValueObject<T>(key: string): T | null {
+export function getValueObject<T>(
+  key: string,
+  dateFields?: string[],
+): T | null {
   const value = localStorage.getItem(key);
   if (!value) return null;
-  return JSON.parse(value) as T;
+
+  let parsedObject = JSON.parse(value);
+
+  if (dateFields && dateFields.length > 0) {
+    for (let df = 0; df < dateFields.length; df++) {
+      const dateField = dateFields[df];
+      parsedObject[dateField] = new Date(parsedObject[dateField]);
+    }
+  }
+
+  return parsedObject as T;
 }
 
 export function saveValueObject<T>(key: string, value: T) {

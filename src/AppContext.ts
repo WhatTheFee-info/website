@@ -6,6 +6,7 @@ import {
 } from './constants';
 import * as feeService from './services/fee.service';
 import * as exchangeRateService from './services/exchangeRate.service';
+import * as storageService from './services/storage.service';
 
 export interface IAppState {
   theme: Theme;
@@ -17,7 +18,29 @@ export interface IAppState {
   selectedFeeRate: 'medianNextBlock' | 'minimumNextBlock' | 'hour';
 }
 
-export const initialState: IAppState = {
+enum LocalStorageKeys {
+  APP_STATE = 'LS_APP_STATE',
+}
+
+function convertToPersistState(state: IAppState) {
+  return (({
+    theme,
+    feeStats,
+    feesLastFetchedAt,
+    exRatesLastFetchedAt,
+    selectedCurrency,
+    selectedFeeRate,
+  }) => ({
+    theme,
+    feeStats,
+    feesLastFetchedAt,
+    exRatesLastFetchedAt,
+    selectedCurrency,
+    selectedFeeRate,
+  }))(state);
+}
+
+const defaultInitialState: IAppState = {
   theme: Theme.light,
   feeStats: undefined,
   feesLastFetchedAt: undefined,
@@ -25,6 +48,13 @@ export const initialState: IAppState = {
   selectedCurrency: 'BTC', // default to BTC
   selectedFeeRate: 'medianNextBlock',
 };
+export function getInitialState() {
+  const storedState = storageService.getValueObject<object>(
+    LocalStorageKeys.APP_STATE,
+    ['feesLastFetchedAt', 'exRatesLastFetchedAt'],
+  );
+  return { ...defaultInitialState, ...storedState };
+}
 
 export interface IAppContext {
   state: IAppState;
@@ -54,52 +84,65 @@ export async function appReducer(
 ): Promise<IAppState> {
   console.debug(`appReducer called: ${action.type}`);
 
+  let updatedState = prevState;
+
   switch (action.type) {
     case ActionType.CHANGE_THEME:
-      return {
+      updatedState = {
         ...prevState,
         theme: action.theme ?? Theme.light,
       };
+      break;
     case ActionType.FETCH_FEE_RATES:
       const feeStats = await fetchFeesStats(prevState);
       if (feeStats) {
-        return {
+        updatedState = {
           ...prevState,
           feeStats: feeStats,
           feesLastFetchedAt: new Date(),
         };
       } else {
-        return prevState;
+        updatedState = prevState;
       }
+      break;
     case ActionType.FETCH_EX_RATES:
       const exRates = await fetchExchangeRates(prevState);
       if (exRates) {
-        return {
+        updatedState = {
           ...prevState,
           exRates: exRates,
           exRatesLastFetchedAt: new Date(),
         };
       } else {
-        return prevState;
+        updatedState = prevState;
       }
+      break;
     case ActionType.SET_SELECTED_CURRENCY:
-      return {
+      updatedState = {
         ...prevState,
         selectedCurrency: action.selectedCurrency,
       };
+      break;
     case ActionType.SET_SELECTED_FEERATE:
-      return {
+      updatedState = {
         ...prevState,
         selectedFeeRate: action.selectedFeeRate as IAppState['selectedFeeRate'],
       };
+      break;
     default:
       throw Error(`App reducer - Unknown action: ${action.type}`);
   }
+
+  // save into storage (only selected properties)
+  const stateToPersist = convertToPersistState(updatedState);
+  storageService.saveValueObject(LocalStorageKeys.APP_STATE, stateToPersist);
+
+  return updatedState;
 }
 
 export function useAsyncReducer(
   reducer: typeof appReducer,
-  initState: IAppState = initialState,
+  initState: IAppState = getInitialState(),
 ): [IAppState, (action: IAction) => Promise<void>] {
   const [state, setState] = useState(initState);
 
@@ -109,7 +152,7 @@ export function useAsyncReducer(
       const newState = await result;
       setState(newState);
     } catch (err) {
-      console.error('Error running reducer on async dispatch.');
+      console.error(err, 'Error running reducer on async dispatch.');
       // setState({ ...state, error: err });
     }
   };
@@ -153,7 +196,7 @@ function fetchExchangeRates(state: IAppState) {
 
 //#endregion ------ Reducers ------
 
-export const AppContext = createContext<IAppState>(initialState);
+export const AppContext = createContext<IAppState>(getInitialState());
 
 export const AppDispatchContext = createContext<React.Dispatch<IAction> | null>(
   null,

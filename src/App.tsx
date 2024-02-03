@@ -4,7 +4,7 @@ import {
   AppContext,
   AppDispatchContext,
   appReducer,
-  initialState,
+  getInitialState,
   useAsyncReducer,
 } from './AppContext';
 import FeeRatePanel from './ui/components/FeeRatePanel';
@@ -13,7 +13,7 @@ import './App.css';
 import SiteHeader from './ui/components/SiteHeader';
 
 function App() {
-  const [state, dispatch] = useAsyncReducer(appReducer, initialState);
+  const [state, dispatch] = useAsyncReducer(appReducer, getInitialState());
 
   useEffect(() => {
     dispatch({
