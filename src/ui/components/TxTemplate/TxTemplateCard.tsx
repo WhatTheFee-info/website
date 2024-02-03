@@ -5,8 +5,6 @@ import {
   WarningCircleSolid,
 } from 'iconoir-react';
 import { TxTemplate } from '../../../types';
-import { useAppContext } from '../../../AppContext';
-import { calculateSatsForFeePercent } from '../../../services/fee.service';
 import { TxTemplateCardMode } from './types';
 import TxTemplateCardMinSatsFee from './TxTemplateCardMinSatsFee';
 

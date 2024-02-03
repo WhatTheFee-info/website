@@ -8,7 +8,7 @@ export default function ThemeSwitch() {
     dispatch,
   } = useAppContext();
 
-  function handleOnChange(event: React.ChangeEvent<HTMLInputElement>) {
+  function handleOnChange() {
     let newTheme: Theme = Theme.light;
     if (theme == Theme.light) {
       newTheme = Theme.dark;
