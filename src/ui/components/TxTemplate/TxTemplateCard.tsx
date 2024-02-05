@@ -7,6 +7,7 @@ import {
 import { TxTemplate } from '../../../types';
 import { TxTemplateCardMode } from './types';
 import TxTemplateCardMinSatsFee from './TxTemplateCardMinSatsFee';
+import { useAppContext } from '../../../AppContext';
 
 interface TxTemplateCardProps {
   template: TxTemplate;
@@ -17,6 +18,10 @@ export default function TxTemplateCard({
   template,
   mode = TxTemplateCardMode.card,
 }: TxTemplateCardProps) {
+  const {
+    state: { selectedFeeRate },
+  } = useAppContext();
+
   const satsNumberFormatter = new Intl.NumberFormat(undefined, {
     minimumFractionDigits: 0,
     maximumFractionDigits: 0,
@@ -51,9 +56,10 @@ export default function TxTemplateCard({
                   ${mode == TxTemplateCardMode.card ? '' : 'ms-4'}`}
             >
               Total fees:{' '}
-              {template.costSats?.medianNextBlock &&
+              {template.costSats &&
+                template.costSats[selectedFeeRate] &&
                 satsNumberFormatter.format(
-                  template.costSats?.medianNextBlock,
+                  template.costSats[selectedFeeRate],
                 )}{' '}
               sats
               <ArrowRight
@@ -83,7 +89,7 @@ export default function TxTemplateCard({
             <TxTemplateCardMinSatsFee
               template={template}
               mode={mode}
-              percent={1}
+              percent={1 * template.inputs.length}
               title="Uneconomic UTXO spend"
               icon={<WarningCircleSolid className="text-red-600 ms-1" />}
             />
