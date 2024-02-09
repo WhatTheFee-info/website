@@ -9,12 +9,14 @@ export default function TxTemplateCardMinSatsFee({
   mode,
   percent,
   icon,
+  color,
   title,
 }: {
   template: TxTemplate;
   mode: TxTemplateCardMode;
   percent: number;
-  icon: ReactElement;
+  icon?: ReactElement;
+  color?: string;
   title?: string;
 }) {
   const {
@@ -66,7 +68,7 @@ export default function TxTemplateCardMinSatsFee({
 
   return (
     <div
-      className={`text-nowrap flex-nowrap text-right flex flex-row justify-end
+      className={`text-nowrap flex-nowrap text-right flex flex-row justify-end items-center
             ${mode == TxTemplateCardMode.card ? '' : 'ms-4'}`}
       title={title ?? `Spend up to ${percent * 100}% in fees`}
     >
@@ -79,7 +81,12 @@ export default function TxTemplateCardMinSatsFee({
           </>
         )}
       </div>
-      {icon}
+      <div
+        className={`ms-1 rounded-full size-6 leading-6 text-[0.75em] text-center
+          ${color} text-slate-50`}
+      >
+        {icon ? icon : percent * 100}
+      </div>
     </div>
   );
 }

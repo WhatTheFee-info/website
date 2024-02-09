@@ -72,26 +72,27 @@ export default function TxTemplateCard({
               template={template}
               mode={mode}
               percent={0.001}
-              icon={<ReportsSolid className="text-lime-600 ms-1" />}
+              color="bg-lime-600"
             />
             <TxTemplateCardMinSatsFee
               template={template}
               mode={mode}
               percent={0.01}
-              icon={<ReportsSolid className="text-amber-600 ms-1" />}
+              color="bg-amber-600"
             />
             <TxTemplateCardMinSatsFee
               template={template}
               mode={mode}
               percent={0.05}
-              icon={<ReportsSolid className="text-red-600 ms-1" />}
+              color="bg-red-600"
             />
             <TxTemplateCardMinSatsFee
               template={template}
               mode={mode}
               percent={1 * template.inputs.length}
               title="Uneconomic UTXO spend"
-              icon={<WarningCircleSolid className="text-red-600 ms-1" />}
+              color="bg-slate-950"
+              icon={<>💀</>}
             />
           </div>
           {mode == TxTemplateCardMode.row && (
