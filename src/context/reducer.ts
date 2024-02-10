@@ -1,79 +1,24 @@
-import React, { createContext, useContext, useState } from 'react';
-import { ExchangeRates, FeesStats, Theme } from './types';
+import { useState } from 'react';
+import { ExchangeRates, FeesStats, Theme } from '../types';
+import { TxTemplateCardMode } from '../ui/components/TxTemplate/types';
+import {
+  IAppState,
+  StateLoadingStatus,
+  getInitialState,
+  persistState,
+} from './state';
 import {
   EXRATES_FETCH_INTERVAL_SEC,
   FEES_FETCH_INTERVAL_SEC,
-} from './constants';
-import * as feeService from './services/fee.service';
-import * as exchangeRateService from './services/exchangeRate.service';
-import * as storageService from './services/storage.service';
-import { TxTemplateCardMode } from './ui/components/TxTemplate/types';
-
-export interface IAppState {
-  theme: Theme;
-  txTemplatesCardMode: TxTemplateCardMode;
-  feeStats?: FeesStats;
-  feesLastFetchedAt?: Date;
-  exRates?: ExchangeRates;
-  exRatesLastFetchedAt?: Date;
-  selectedCurrency?: string;
-  selectedFeeRate: 'medianNextBlock' | 'minimumNextBlock' | 'hour';
-}
-
-enum LocalStorageKeys {
-  APP_STATE = 'APP_STATE',
-}
-
-function convertToPersistState(state: IAppState) {
-  return (({
-    theme,
-    txTemplatesCardMode,
-    feeStats,
-    feesLastFetchedAt,
-    exRates,
-    exRatesLastFetchedAt,
-    selectedCurrency,
-    selectedFeeRate,
-  }) => ({
-    theme,
-    txTemplatesCardMode,
-    feeStats,
-    feesLastFetchedAt,
-    exRates,
-    exRatesLastFetchedAt,
-    selectedCurrency,
-    selectedFeeRate,
-  }))(state);
-}
-
-const defaultInitialState: IAppState = {
-  theme: Theme.light,
-  txTemplatesCardMode: TxTemplateCardMode.row,
-  feeStats: undefined,
-  feesLastFetchedAt: undefined,
-  exRates: { BTC: 1 }, // default to only having BTC
-  selectedCurrency: 'BTC', // default to BTC
-  selectedFeeRate: 'medianNextBlock',
-};
-export function getInitialState() {
-  const storedState = storageService.getValueObject<object>(
-    LocalStorageKeys.APP_STATE,
-    ['feesLastFetchedAt', 'exRatesLastFetchedAt'],
-  );
-  return { ...defaultInitialState, ...storedState };
-}
-
-export interface IAppContext {
-  state: IAppState;
-  dispatch: React.Dispatch<IAction>;
-}
-
-//#region ------ Reducers ------
+} from '../constants';
+import * as feeService from '../services/fee.service';
+import * as exchangeRateService from '../services/exchangeRate.service';
 
 export enum ActionType {
   CHANGE_THEME = 'CHANGE_THEME',
   CHANGE_TXTEMPLATE_CARD_MODE = 'CHANGE_TXTEMPLATE_CARD_MODE',
   FETCH_FEE_RATES = 'FETCH_FEE_RATES',
+  STORE_FEE_STATS = 'STORE_FEE_STATS',
   FETCH_EX_RATES = 'FETCH_EX_RATES',
   SET_SELECTED_CURRENCY = 'SET_SELECTED_CURRENCY',
   SET_SELECTED_FEERATE = 'SET_SELECTED_FEERATE',
@@ -109,16 +54,23 @@ export async function appReducer(
           action.txTemplatesCardMode ?? TxTemplateCardMode.row,
       };
       break;
+    case ActionType.STORE_FEE_STATS:
+      updatedState = {
+        ...prevState,
+        feeStats: action.fees,
+        feeStatsStatus: StateLoadingStatus.DONE,
+        feesLastFetchedAt: new Date(),
+      };
+      break;
     case ActionType.FETCH_FEE_RATES:
       const feeStats = await fetchFeesStats(prevState);
       if (feeStats) {
         updatedState = {
           ...prevState,
           feeStats: feeStats,
+          feeStatsStatus: StateLoadingStatus.DONE,
           feesLastFetchedAt: new Date(),
         };
-      } else {
-        updatedState = prevState;
       }
       break;
     case ActionType.FETCH_EX_RATES:
@@ -127,10 +79,9 @@ export async function appReducer(
         updatedState = {
           ...prevState,
           exRates: exRates,
+          exRatesStatsStatus: StateLoadingStatus.DONE,
           exRatesLastFetchedAt: new Date(),
         };
-      } else {
-        updatedState = prevState;
       }
       break;
     case ActionType.SET_SELECTED_CURRENCY:
@@ -150,8 +101,7 @@ export async function appReducer(
   }
 
   // save into storage (only selected properties)
-  const stateToPersist = convertToPersistState(updatedState);
-  storageService.saveValueObject(LocalStorageKeys.APP_STATE, stateToPersist);
+  persistState(updatedState);
 
   return updatedState;
 }
@@ -193,7 +143,7 @@ async function fetchFeesStats(state: IAppState) {
   return feeService.getFeeStats();
 }
 
-function fetchExchangeRates(state: IAppState) {
+async function fetchExchangeRates(state: IAppState) {
   // only fetch if not fetched fro EXRATES_FETCH_INTERVAL_SEC seconds
   if (state.exRates && state.exRatesLastFetchedAt) {
     const secondsFromLastFetch =
@@ -208,25 +158,4 @@ function fetchExchangeRates(state: IAppState) {
 
   // load the recommended fees
   return exchangeRateService.getExchangeRates();
-}
-
-//#endregion ------ Reducers ------
-
-export const AppContext = createContext<IAppState>(getInitialState());
-
-export const AppDispatchContext = createContext<React.Dispatch<IAction> | null>(
-  null,
-);
-
-// Define helpful hook to get AppContext state and AppDispatchContext dispatch
-export function useAppContext(): {
-  state: IAppState;
-  dispatch: React.Dispatch<IAction>;
-} {
-  const context = useContext(AppContext);
-  const dispatchContext = useContext(AppDispatchContext);
-  if (!context || !dispatchContext) {
-    throw new Error('context or dispatchContext not defined');
-  }
-  return { state: context, dispatch: dispatchContext };
 }

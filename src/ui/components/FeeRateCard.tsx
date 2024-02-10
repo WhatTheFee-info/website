@@ -1,5 +1,7 @@
 import { CheckCircle, CheckCircleSolid } from 'iconoir-react';
-import { ActionType, IAppState, useAppContext } from '../../AppContext';
+import { useAppContext } from '../../context/AppContext';
+import { IAppState } from '../../context/state';
+import { ActionType } from '../../context/reducer';
 
 interface FeeRateCardProps {
   title: string;

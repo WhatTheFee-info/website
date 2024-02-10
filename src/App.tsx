@@ -1,12 +1,7 @@
 import { useEffect } from 'react';
-import {
-  ActionType,
-  AppContext,
-  AppDispatchContext,
-  appReducer,
-  getInitialState,
-  useAsyncReducer,
-} from './AppContext';
+import { AppContext, AppDispatchContext } from './context/AppContext';
+import { ActionType, appReducer, useAsyncReducer } from './context/reducer';
+import { getInitialState } from './context/state';
 import FeeRatePanel from './ui/components/FeeRatePanel';
 import TxTemplatesGrid from './ui/components/TxTemplate/TxTemplatesGrid';
 import './App.css';

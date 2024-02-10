@@ -1,6 +1,6 @@
 import * as dateFns from 'date-fns';
 import FeeRateCard from './FeeRateCard';
-import { useAppContext } from '../../AppContext';
+import { useAppContext } from '../../context/AppContext';
 
 export default function FeeRatePanel() {
   const {

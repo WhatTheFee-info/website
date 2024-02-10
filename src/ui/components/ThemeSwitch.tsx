@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
-import { ActionType, useAppContext } from '../../AppContext';
+import { useAppContext } from '../../context/AppContext';
 import { Theme } from '../../types';
+import { ActionType } from '../../context/reducer';
 
 export default function ThemeSwitch() {
   const {

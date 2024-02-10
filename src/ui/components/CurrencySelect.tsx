@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
-import { ActionType, useAppContext } from '../../AppContext';
+import { useAppContext } from '../../context/AppContext';
+import { ActionType } from '../../context/reducer';
 
 export default function CurrencySelect() {
   const {

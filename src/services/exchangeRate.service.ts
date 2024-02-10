@@ -1,6 +1,6 @@
 import APIClient from '../APIClient';
+import { YADIO_API_BASE_URL } from '../constants';
 
-const YADIO_API_BASE_URL = 'https://api.yadio.io';
 
 interface ExRatesCurrency {
   // we define the interface this way because we'll be fetching ex rates for BTC

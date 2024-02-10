@@ -3,7 +3,7 @@ import { TxTemplate } from '../../../types';
 import { calcaulteSize } from '../../../services/transaction.service';
 import definedTemplates from '../../../templates';
 import TxTemplateCard from './TxTemplateCard';
-import { ActionType, useAppContext } from '../../../AppContext';
+import { useAppContext } from '../../../context/AppContext';
 import SearchInput from '../SearchInput';
 import {
   InfoCircle,
@@ -19,6 +19,7 @@ import Button from '../Button';
 import { TxTemplateCardMode } from './types';
 import useScreenSize from '../../hooks';
 import { SCREEN_SIZE_MD } from '../../../constants';
+import { ActionType } from '../../../context/reducer';
 
 enum SortField {
   name = 'name',
@@ -133,7 +134,7 @@ export default function TxTemplatesGrid() {
     }
     if (tagsToFilterBy.length > 0) {
       filteredSortedTemplates = filteredSortedTemplates?.filter((template) =>
-      tagsToFilterBy.every((tag) => template.tags?.includes(tag)),
+        tagsToFilterBy.every((tag) => template.tags?.includes(tag)),
       );
     }
 

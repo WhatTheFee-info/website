@@ -1,6 +1,6 @@
 import { ReactElement } from 'react';
 import { TxTemplate } from '../../../types';
-import { useAppContext } from '../../../AppContext';
+import { useAppContext } from '../../../context/AppContext';
 import { calculateSatsForFeePercent } from '../../../services/fee.service';
 import { TxTemplateCardMode } from './types';
 

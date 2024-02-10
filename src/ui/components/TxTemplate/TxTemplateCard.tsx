@@ -2,7 +2,7 @@ import { ArrowRight, Cube } from 'iconoir-react';
 import { TxTemplate } from '../../../types';
 import { TxTemplateCardMode } from './types';
 import TxTemplateCardMinSatsFee from './TxTemplateCardMinSatsFee';
-import { useAppContext } from '../../../AppContext';
+import { useAppContext } from '../../../context/AppContext';
 
 interface TxTemplateCardProps {
   template: TxTemplate;
