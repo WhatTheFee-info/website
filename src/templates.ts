@@ -18,6 +18,13 @@ export default [
   },
   // Segwit payments
   {
+    code: 'p2wpkh_1i-1o',
+    name: 'Key sweep',
+    inputs: [{ type: TxInputType.P2WPKH }],
+    outputs: [{ type: TxOutputType.P2WPKH }],
+    tags: ['SegWit'],
+  },
+  {
     code: 'p2wpkh_1i-2o',
     name: 'Simple payment',
     inputs: [{ type: TxInputType.P2WPKH }],
@@ -44,6 +51,13 @@ export default [
     name: 'Typical payment',
     inputs: [{ type: TxInputType.P2TR }, { type: TxInputType.P2TR }],
     outputs: [{ type: TxOutputType.P2TR }, { type: TxOutputType.P2TR }],
+    tags: ['Taproot'],
+  },
+  {
+    code: 'p2tr_1i-1o',
+    name: 'Key sweep',
+    inputs: [{ type: TxInputType.P2TR }],
+    outputs: [{ type: TxOutputType.P2TR }],
     tags: ['Taproot'],
   },
   // Multi-sig
