@@ -42,6 +42,7 @@ export default function TxTemplatesGrid() {
     useState<TxTemplate[]>();
   const [finalTemplates, setFinalTemplates] = useState<TxTemplate[]>();
   const [searchText, setSearchText] = useState<string>();
+  const [tagsFilter, setTagsFilter] = useState<{ [tag: string]: boolean }>({});
   const [sortingField, setSortingField] = useState<SortField>(SortField.none);
   const [sortingDirection, setSortingDirection] = useState<SortDirection>(
     SortDirection.asc,
@@ -50,9 +51,18 @@ export default function TxTemplatesGrid() {
   function calculateTemplatesCosts() {
     console.debug('Calculating size and cost...');
 
+    const tagsObject: { [tag: string]: boolean } = {};
     const calculatedTemplates = definedTemplates as TxTemplate[];
     for (let t = 0; t < definedTemplates.length; t++) {
       const template = definedTemplates[t];
+
+      // add tags to the filter
+      template.tags?.map((tag) => {
+        tagsObject[tag] = false; // not filtered by it
+      });
+
+      // now calculate cost
+
       template.sizeVB = calcaulteSize(template);
       // now calculate cost (use Math.ceil to round up sats amoung)
       template.costSats = {
@@ -70,6 +80,7 @@ export default function TxTemplatesGrid() {
       };
     }
     setCalculatedTemplates(calculatedTemplates);
+    setTagsFilter(tagsObject);
   }
 
   useEffect(() => {
@@ -78,7 +89,13 @@ export default function TxTemplatesGrid() {
 
   useEffect(() => {
     filterTemplates();
-  }, [searchText, sortingField, sortingDirection, calculatedTemplates]);
+  }, [
+    searchText,
+    tagsFilter,
+    sortingField,
+    sortingDirection,
+    calculatedTemplates,
+  ]);
 
   useEffect(() => {
     if (screenSize.width <= SCREEN_SIZE_MD) {
@@ -91,6 +108,8 @@ export default function TxTemplatesGrid() {
 
   function filterTemplates() {
     let filteredSortedTemplates = calculatedTemplates?.slice() ?? [];
+
+    // search text
     if (searchText) {
       filteredSortedTemplates = filteredSortedTemplates?.filter((template) => {
         const searchTextL = searchText.toLowerCase();
@@ -102,6 +121,20 @@ export default function TxTemplatesGrid() {
           )
         );
       });
+    }
+
+    // tags
+    let tagsToFilterBy: string[] = [];
+    for (let t = 0; t < Object.keys(tagsFilter).length; t++) {
+      const tag = Object.keys(tagsFilter)[t];
+      if (tagsFilter[tag]) {
+        tagsToFilterBy.push(tag);
+      }
+    }
+    if (tagsToFilterBy.length > 0) {
+      filteredSortedTemplates = filteredSortedTemplates?.filter((template) =>
+      tagsToFilterBy.every((tag) => template.tags?.includes(tag)),
+      );
     }
 
     // now sort
@@ -127,6 +160,25 @@ export default function TxTemplatesGrid() {
     setFinalTemplates(filteredSortedTemplates);
   }
 
+  function renderTagsForFiltering() {
+    if (!tagsFilter) return null;
+
+    return (
+      <div>
+        {Object.keys(tagsFilter).map((tag) => (
+          <button
+            key={tag}
+            onClick={() => handleTagFilterClick(tag)}
+            className={`rounded-full bg-sky-200 text-sky-950 mx-1 text-xs py-1 px-1.5
+              ${tagsFilter[tag] ? 'bg-sky-300 border border-solid border-sky-500' : ''}`}
+          >
+            {tag}
+          </button>
+        ))}
+      </div>
+    );
+  }
+
   //#region Handle functions
 
   function handleInfoBoxButtonClick() {
@@ -135,6 +187,12 @@ export default function TxTemplatesGrid() {
 
   function handleSearchChange(text: string) {
     setSearchText(text);
+  }
+
+  function handleTagFilterClick(tag: string) {
+    const newTagFilter = { ...tagsFilter };
+    newTagFilter[tag] = !newTagFilter[tag];
+    setTagsFilter(newTagFilter);
   }
 
   function handleSortFieldNameClick() {
@@ -267,6 +325,10 @@ export default function TxTemplatesGrid() {
             <TableRows />
           </Button>
         </div>
+      </div>
+      <div className="flex flex-col md:flex-row mt-1">
+        <span>Filter by tags: </span>
+        {renderTagsForFiltering()}
       </div>
       <div className="flex-1">
         {!finalTemplates || finalTemplates.length == 0 ? (
