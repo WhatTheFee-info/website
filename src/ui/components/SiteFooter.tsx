@@ -9,7 +9,7 @@ export default function SiteFooter() {
     >
       <p>
         {`Version ${config.appVersion}. `}
-        This project is open source.
+        This project is open source. Made with white coffee ☕ from Coseco 🏴‍☠️⚔️.
       </p>
       <a href={config.repoUrl} target="_blank">
         <GithubCircle className="inline-block" />
