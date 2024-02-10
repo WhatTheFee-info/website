@@ -69,7 +69,7 @@ export default function TxTemplateCardMinSatsFee({
   return (
     <div
       className={`text-nowrap flex-nowrap text-right flex flex-row justify-end items-center
-            ${mode == TxTemplateCardMode.card ? '' : 'ms-4'}`}
+            ${mode == TxTemplateCardMode.card ? '' : 'md:ms-4'}`}
       title={title ?? `Spend up to ${percent * 100}% in fees`}
     >
       <div>

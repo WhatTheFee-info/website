@@ -27,7 +27,7 @@ export default function TxTemplateCard({
       className={`flex flex-col rounded border bg-white border-slate-300 shadow
         dark:bg-slate-950 dark:border-slate-600 dark:shadow-slate-400
           hover:shadow-lg p-4 m-2
-          ${mode == TxTemplateCardMode.card ? '' : 'w-full'}`}
+          ${mode == TxTemplateCardMode.card ? '' : 'md:w-full'}`}
     >
       <div className="flex flex-row p-1">
         <div className="flex flex-col grow">
@@ -44,11 +44,11 @@ export default function TxTemplateCard({
         </div>
         <div className={`flex flex-col ml-4`}>
           <div
-            className={`flex ${mode == TxTemplateCardMode.card ? 'flex-col' : 'flex-row'} ml-4`}
+            className={`flex flex-col ${mode == TxTemplateCardMode.card ? '' : 'md:flex-row'} ml-4`}
           >
             <div
               className={`text-nowrap flex-nowrap text-left flex flex-row justify-end items-center
-                  ${mode == TxTemplateCardMode.card ? '' : 'ms-4'}`}
+                  ${mode == TxTemplateCardMode.card ? '' : 'md:ms-4'}`}
             >
               Total fees:{' '}
               {template.costSats &&

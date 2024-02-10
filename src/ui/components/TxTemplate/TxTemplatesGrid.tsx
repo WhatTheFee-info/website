@@ -17,6 +17,8 @@ import {
 } from 'iconoir-react';
 import Button from '../Button';
 import { TxTemplateCardMode } from './types';
+import useScreenSize from '../../hooks';
+import { SCREEN_SIZE_MD } from '../../../constants';
 
 enum SortField {
   name = 'name',
@@ -32,6 +34,7 @@ export default function TxTemplatesGrid() {
   const {
     state: { feeStats },
   } = useAppContext();
+  const screenSize = useScreenSize();
 
   const [showInfoBox, setShowInfoBox] = useState<boolean>(false);
   const [calculatedTemplates, setCalculatedTemplates] =
@@ -78,6 +81,12 @@ export default function TxTemplatesGrid() {
   useEffect(() => {
     filterTemplates();
   }, [searchText, sortingField, sortingDirection, calculatedTemplates]);
+
+  useEffect(() => {
+    if (screenSize.width <= SCREEN_SIZE_MD) {
+      setGridMode(TxTemplateCardMode.card);
+    }
+  }, [screenSize]);
 
   function filterTemplates() {
     let filteredSortedTemplates = calculatedTemplates?.slice() ?? [];
@@ -205,6 +214,7 @@ export default function TxTemplatesGrid() {
           <span className="me-1">Sort by:</span>
           <Button
             onClick={handleSortFieldNameClick}
+            active={sortingField == SortField.name}
             className="flex flex-row flex-nowrap"
           >
             Name
@@ -217,6 +227,7 @@ export default function TxTemplatesGrid() {
           </Button>
           <Button
             onClick={handleSortFieldSizeClick}
+            active={sortingField == SortField.size}
             className="flex flex-row flex-nowrap"
           >
             Size
@@ -236,11 +247,16 @@ export default function TxTemplatesGrid() {
           <Button
             onClick={handleViewModeCardClick}
             className="ms-2"
+            active={gridMode == TxTemplateCardMode.card}
             title="Tile / Grid view"
           >
             <ViewGrid />
           </Button>
-          <Button onClick={handleViewModeRowClick} title="Table view">
+          <Button
+            onClick={handleViewModeRowClick}
+            active={gridMode == TxTemplateCardMode.row}
+            title="Table view"
+          >
             <TableRows />
           </Button>
         </div>
