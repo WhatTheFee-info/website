@@ -7,9 +7,11 @@ import {
 import * as feeService from './services/fee.service';
 import * as exchangeRateService from './services/exchangeRate.service';
 import * as storageService from './services/storage.service';
+import { TxTemplateCardMode } from './ui/components/TxTemplate/types';
 
 export interface IAppState {
   theme: Theme;
+  txTemplatesCardMode: TxTemplateCardMode;
   feeStats?: FeesStats;
   feesLastFetchedAt?: Date;
   exRates?: ExchangeRates;
@@ -25,6 +27,7 @@ enum LocalStorageKeys {
 function convertToPersistState(state: IAppState) {
   return (({
     theme,
+    txTemplatesCardMode,
     feeStats,
     feesLastFetchedAt,
     exRates,
@@ -33,6 +36,7 @@ function convertToPersistState(state: IAppState) {
     selectedFeeRate,
   }) => ({
     theme,
+    txTemplatesCardMode,
     feeStats,
     feesLastFetchedAt,
     exRates,
@@ -44,6 +48,7 @@ function convertToPersistState(state: IAppState) {
 
 const defaultInitialState: IAppState = {
   theme: Theme.light,
+  txTemplatesCardMode: TxTemplateCardMode.row,
   feeStats: undefined,
   feesLastFetchedAt: undefined,
   exRates: { BTC: 1 }, // default to only having BTC
@@ -67,6 +72,7 @@ export interface IAppContext {
 
 export enum ActionType {
   CHANGE_THEME = 'CHANGE_THEME',
+  CHANGE_TXTEMPLATE_CARD_MODE = 'CHANGE_TXTEMPLATE_CARD_MODE',
   FETCH_FEE_RATES = 'FETCH_FEE_RATES',
   FETCH_EX_RATES = 'FETCH_EX_RATES',
   SET_SELECTED_CURRENCY = 'SET_SELECTED_CURRENCY',
@@ -75,6 +81,7 @@ export enum ActionType {
 export type IAction = {
   type: ActionType;
   theme?: Theme;
+  txTemplatesCardMode?: TxTemplateCardMode;
   fees?: FeesStats;
   exRates?: ExchangeRates;
   selectedCurrency?: string;
@@ -93,6 +100,13 @@ export async function appReducer(
       updatedState = {
         ...prevState,
         theme: action.theme ?? Theme.light,
+      };
+      break;
+    case ActionType.CHANGE_TXTEMPLATE_CARD_MODE:
+      updatedState = {
+        ...prevState,
+        txTemplatesCardMode:
+          action.txTemplatesCardMode ?? TxTemplateCardMode.row,
       };
       break;
     case ActionType.FETCH_FEE_RATES:

@@ -3,7 +3,7 @@ import { TxTemplate } from '../../../types';
 import { calcaulteSize } from '../../../services/transaction.service';
 import definedTemplates from '../../../templates';
 import TxTemplateCard from './TxTemplateCard';
-import { useAppContext } from '../../../AppContext';
+import { ActionType, useAppContext } from '../../../AppContext';
 import SearchInput from '../SearchInput';
 import {
   InfoCircle,
@@ -32,7 +32,8 @@ enum SortDirection {
 
 export default function TxTemplatesGrid() {
   const {
-    state: { feeStats },
+    state: { txTemplatesCardMode, feeStats },
+    dispatch,
   } = useAppContext();
   const screenSize = useScreenSize();
 
@@ -44,9 +45,6 @@ export default function TxTemplatesGrid() {
   const [sortingField, setSortingField] = useState<SortField>(SortField.none);
   const [sortingDirection, setSortingDirection] = useState<SortDirection>(
     SortDirection.asc,
-  );
-  const [gridMode, setGridMode] = useState<TxTemplateCardMode>(
-    TxTemplateCardMode.row,
   );
 
   function calculateTemplatesCosts() {
@@ -84,7 +82,10 @@ export default function TxTemplatesGrid() {
 
   useEffect(() => {
     if (screenSize.width <= SCREEN_SIZE_MD) {
-      setGridMode(TxTemplateCardMode.card);
+      dispatch({
+        type: ActionType.CHANGE_TXTEMPLATE_CARD_MODE,
+        txTemplatesCardMode: TxTemplateCardMode.card,
+      });
     }
   }, [screenSize]);
 
@@ -163,10 +164,16 @@ export default function TxTemplatesGrid() {
   }
 
   function handleViewModeCardClick() {
-    setGridMode(TxTemplateCardMode.card);
+    dispatch({
+      type: ActionType.CHANGE_TXTEMPLATE_CARD_MODE,
+      txTemplatesCardMode: TxTemplateCardMode.card,
+    });
   }
   function handleViewModeRowClick() {
-    setGridMode(TxTemplateCardMode.row);
+    dispatch({
+      type: ActionType.CHANGE_TXTEMPLATE_CARD_MODE,
+      txTemplatesCardMode: TxTemplateCardMode.row,
+    });
   }
 
   //#endregion Handle functions
@@ -247,14 +254,14 @@ export default function TxTemplatesGrid() {
           <Button
             onClick={handleViewModeCardClick}
             className="ms-2"
-            active={gridMode == TxTemplateCardMode.card}
+            active={txTemplatesCardMode == TxTemplateCardMode.card}
             title="Tile / Grid view"
           >
             <ViewGrid />
           </Button>
           <Button
             onClick={handleViewModeRowClick}
-            active={gridMode == TxTemplateCardMode.row}
+            active={txTemplatesCardMode == TxTemplateCardMode.row}
             title="Table view"
           >
             <TableRows />
@@ -273,7 +280,7 @@ export default function TxTemplatesGrid() {
               <TxTemplateCard
                 key={template.code}
                 template={template}
-                mode={gridMode}
+                mode={txTemplatesCardMode}
               />
             ))}
           </div>
