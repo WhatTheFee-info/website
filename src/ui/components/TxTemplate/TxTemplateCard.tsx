@@ -1,4 +1,4 @@
-import { ArrowRight, Cube } from 'iconoir-react';
+import { ArrowRight, Coins, Cube } from 'iconoir-react';
 import { TxTemplate } from '../../../types';
 import { TxTemplateCardMode } from './types';
 import TxTemplateCardMinSatsFee from './TxTemplateCardMinSatsFee';
@@ -10,10 +10,11 @@ interface TxTemplateCardProps {
   mode?: TxTemplateCardMode;
 }
 
-export default function TxTemplateCard({
+function TxTemplateTotalFees({
   template,
-  mode = TxTemplateCardMode.card,
-}: TxTemplateCardProps) {
+  mode,
+  className,
+}: TxTemplateCardProps & { className: string }) {
   const {
     state: { selectedFeeRate, exRates, selectedCurrency },
   } = useAppContext();
@@ -22,7 +23,44 @@ export default function TxTemplateCard({
     minimumFractionDigits: 0,
     maximumFractionDigits: 0,
   });
+  return (
+    <div
+      className={`text-nowrap flex-nowrap flex flex-row items-center ${className}
+          ${mode == TxTemplateCardMode.card ? '' : 'md:ms-4'}`}
+    >
+      <div className="flex flex-row" title="Total fee for the transaction">
+        <Coins />
+        <span className="hidden md:inline">Total fees:</span>
+      </div>
+      <div className="ms-1 text-nowrap text-right flex flex-col justify-center">
+        {template.costSats && template.costSats[selectedFeeRate] && (
+          <>
+            {satsNumberFormatter.format(template.costSats[selectedFeeRate])}{' '}
+            sats
+            {selectedCurrency != 'BTC' && (
+              <>
+                <br />
+                <small>
+                  {convertToCurrencyAndFormat(
+                    template.costSats[selectedFeeRate],
+                    exRates,
+                    selectedCurrency,
+                  )}
+                </small>
+              </>
+            )}
+          </>
+        )}
+      </div>
+      <ArrowRight className="inline-block mx-1" height="1em" width="1em" />
+    </div>
+  );
+}
 
+export default function TxTemplateCard({
+  template,
+  mode = TxTemplateCardMode.card,
+}: TxTemplateCardProps) {
   return (
     <div
       className={`flex flex-col rounded border bg-white border-slate-300 shadow
@@ -35,51 +73,32 @@ export default function TxTemplateCard({
           <h4 className="text-left font-bold mb-1">{template.name}</h4>
           <small>{`${template.inputs.length} inputs -> ${template.outputs.length} outputs`}</small>
           {mode == TxTemplateCardMode.card && (
-            <div className="text-left">
-              <span title="Transaction size">
-                <Cube className="inline-block me-1" />
-              </span>
-              {template.sizeVB} vBytes
-            </div>
+            <>
+              <div className="text-left">
+                <span title="Transaction size">
+                  <Cube className="inline-block me-1" />
+                </span>
+                {template.sizeVB} vBytes
+                <TxTemplateTotalFees
+                  mode={mode}
+                  template={template}
+                  className="justify-start"
+                />
+              </div>
+            </>
           )}
         </div>
         <div className={`flex flex-col ml-4`}>
           <div
             className={`flex flex-col ${mode == TxTemplateCardMode.card ? '' : 'md:flex-row'} ml-4`}
           >
-            <div
-              className={`text-nowrap flex-nowrap text-left flex flex-row justify-end items-center
-                  ${mode == TxTemplateCardMode.card ? '' : 'md:ms-4'}`}
-            >
-              Total fees:
-              <div className="ms-1 text-nowrap text-right flex flex-col justify-center">
-                {template.costSats && template.costSats[selectedFeeRate] && (
-                  <>
-                    {satsNumberFormatter.format(
-                      template.costSats[selectedFeeRate],
-                    )}{' '}
-                    sats
-                    {selectedCurrency != 'BTC' && (
-                      <>
-                        <br />
-                        <small>
-                          {convertToCurrencyAndFormat(
-                            template.costSats[selectedFeeRate],
-                            exRates,
-                            selectedCurrency,
-                          )}
-                        </small>
-                      </>
-                    )}
-                  </>
-                )}
-              </div>
-              <ArrowRight
-                className="inline-block mx-1"
-                height="1em"
-                width="1em"
+            {mode == TxTemplateCardMode.row && (
+              <TxTemplateTotalFees
+                mode={mode}
+                template={template}
+                className=""
               />
-            </div>
+            )}
             <TxTemplateCardMinSatsFee
               template={template}
               mode={mode}
