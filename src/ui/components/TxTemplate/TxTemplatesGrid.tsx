@@ -7,12 +7,10 @@ import { useAppContext } from '../../../context/AppContext';
 import SearchInput from '../SearchInput';
 import {
   InfoCircle,
-  ReportsSolid,
   SortDown,
   SortUp,
   TableRows,
   ViewGrid,
-  WarningCircleSolid,
   Xmark,
 } from 'iconoir-react';
 import Button from '../Button';
@@ -20,6 +18,7 @@ import { TxTemplateCardMode } from './types';
 import useScreenSize from '../../hooks';
 import { SCREEN_SIZE_MD } from '../../../constants';
 import { ActionType } from '../../../context/reducer';
+import TxTemplateHealthIcon from './TxTemplateHealthIcon';
 
 enum SortField {
   name = 'name',
@@ -169,7 +168,7 @@ export default function TxTemplatesGrid() {
             key={tag}
             onClick={() => handleTagFilterClick(tag)}
             className={`rounded-full bg-sky-200 text-sky-950 mx-1 text-xs py-1 px-1.5
-              ${tagsFilter[tag] ? 'bg-sky-300 border border-solid border-sky-500' : ''}`}
+              ${tagsFilter[tag] ? 'bg-sky-600 text-sky-100 border border-solid border-sky-800' : ''}`}
           >
             {tag}
           </button>
@@ -246,28 +245,40 @@ export default function TxTemplatesGrid() {
           onClick={handleInfoBoxButtonClick}
         />
       </h2>
+      <small>
+        Check the health of your UTXO depending on which type of transaction you
+        want to make.
+      </small>
       {showInfoBox && (
         <div
           id="info-help"
           className="flex-1 p-2 text-sm bg-sky-100 mb-2
           border border-solid border-sky-400 rounded"
         >
-          <span className="flex flex-row">
-            <ReportsSolid className="text-lime-600 me-1" />
-            Sats to spend for the fees to be up to 0.1%
-          </span>
-          <span className="flex flex-row">
-            <ReportsSolid className="text-amber-600 me-1" />
-            Sats to spend for the fees to be up to 1%
-          </span>
-          <span className="flex flex-row">
-            <ReportsSolid className="text-red-600 me-1" />
-            Sats to spend for the fees to be 5%
-          </span>
-          <span className="flex flex-row">
-            <WarningCircleSolid className="text-red-600 me-1" />
-            Sats to spend to make the transaction uneconomic
-          </span>
+          <p className="mb-1">
+            See which are the minimum amounts of sats per UTXO to include in a
+            transaction, in order for you to pay a certain % in fees.
+          </p>
+          <p className="flex flex-row mb-1">
+            <TxTemplateHealthIcon color={'bg-lime-600'} percent={0.001} />
+            Sats to spend in UTXO for the fees to be up to 0.1%
+          </p>
+          <p className="flex flex-row mb-1">
+            <TxTemplateHealthIcon color={'bg-amber-600'} percent={0.01} />
+            Sats to spend in UTXO for the fees to be up to 1%
+          </p>
+          <p className="flex flex-row mb-1">
+            <TxTemplateHealthIcon color={'bg-red-600'} percent={0.05} />
+            Sats to spend in UTXO for the fees to be 5%
+          </p>
+          <p className="flex flex-row mb-1">
+            <TxTemplateHealthIcon
+              color={'bg-slate-950'}
+              icon={<>💀</>}
+              percent={1}
+            />
+            Sats to spend in UTXO to make in uneconomic (basically dead)
+          </p>
         </div>
       )}
       <div className="flex flex-col md:flex-row">

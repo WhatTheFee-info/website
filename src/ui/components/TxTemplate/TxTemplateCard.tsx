@@ -120,7 +120,7 @@ export default function TxTemplateCard({
             <TxTemplateCardMinSatsFee
               template={template}
               mode={mode}
-              percent={1 * template.inputs.length}
+              percent={1}
               title="Uneconomic UTXO spend"
               color="bg-slate-950"
               icon={<>💀</>}

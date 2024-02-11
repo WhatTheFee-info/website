@@ -4,6 +4,7 @@ import { useAppContext } from '../../../context/AppContext';
 import { calculateSatsForFeePercent } from '../../../services/fee.service';
 import { TxTemplateCardMode } from './types';
 import { convertToCurrencyAndFormat } from '../../../services/exchangeRate.service';
+import TxTemplateHealthIcon from './TxTemplateHealthIcon';
 
 export default function TxTemplateCardMinSatsFee({
   template,
@@ -30,22 +31,24 @@ export default function TxTemplateCardMinSatsFee({
   });
 
   function calculateSatsForFeePercentAndFormat(percentMax: number) {
-    const minSatsToSpend = calculateSatsForFeePercent(
-      (template.costSats && template.costSats[selectedFeeRate]) ?? 0,
-      percentMax,
-    );
+    const minSatsToSpend =
+      calculateSatsForFeePercent(
+        (template.costSats && template.costSats[selectedFeeRate]) ?? 0,
+        percentMax,
+      ) / template.inputs.length;
 
     return satsNumberFormatter.format(minSatsToSpend);
   }
 
   function calculateFiatForPercentAndFormat(percentMax: number) {
-    const minSatsToSpend = calculateSatsForFeePercent(
-      (template.costSats && template.costSats[selectedFeeRate]) ?? 0,
-      percentMax,
-    );
+    const minSatsToSpendPerUTXO =
+      calculateSatsForFeePercent(
+        (template.costSats && template.costSats[selectedFeeRate]) ?? 0,
+        percentMax,
+      ) / template.inputs.length;
 
     return convertToCurrencyAndFormat(
-      minSatsToSpend,
+      minSatsToSpendPerUTXO,
       exRates,
       selectedCurrency,
     );
@@ -66,12 +69,7 @@ export default function TxTemplateCardMinSatsFee({
           </>
         )}
       </div>
-      <div
-        className={`ms-1 rounded-full size-6 leading-6 text-[0.75em] text-center
-          ${color} text-slate-50`}
-      >
-        {icon ? icon : percent * 100}
-      </div>
+      <TxTemplateHealthIcon color={color} icon={icon} percent={percent} />
     </div>
   );
 }
