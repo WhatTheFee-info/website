@@ -3,6 +3,7 @@ import { TxTemplate } from '../../../types';
 import { TxTemplateCardMode } from './types';
 import TxTemplateCardMinSatsFee from './TxTemplateCardMinSatsFee';
 import { useAppContext } from '../../../context/AppContext';
+import { convertToCurrencyAndFormat } from '../../../services/exchangeRate.service';
 
 interface TxTemplateCardProps {
   template: TxTemplate;
@@ -14,7 +15,7 @@ export default function TxTemplateCard({
   mode = TxTemplateCardMode.card,
 }: TxTemplateCardProps) {
   const {
-    state: { selectedFeeRate },
+    state: { selectedFeeRate, exRates, selectedCurrency },
   } = useAppContext();
 
   const satsNumberFormatter = new Intl.NumberFormat(undefined, {
@@ -50,13 +51,29 @@ export default function TxTemplateCard({
               className={`text-nowrap flex-nowrap text-left flex flex-row justify-end items-center
                   ${mode == TxTemplateCardMode.card ? '' : 'md:ms-4'}`}
             >
-              Total fees:{' '}
-              {template.costSats &&
-                template.costSats[selectedFeeRate] &&
-                satsNumberFormatter.format(
-                  template.costSats[selectedFeeRate],
-                )}{' '}
-              sats
+              Total fees:
+              <div className="ms-1 text-nowrap text-right flex flex-col justify-center">
+                {template.costSats && template.costSats[selectedFeeRate] && (
+                  <>
+                    {satsNumberFormatter.format(
+                      template.costSats[selectedFeeRate],
+                    )}{' '}
+                    sats
+                    {selectedCurrency != 'BTC' && (
+                      <>
+                        <br />
+                        <small>
+                          {convertToCurrencyAndFormat(
+                            template.costSats[selectedFeeRate],
+                            exRates,
+                            selectedCurrency,
+                          )}
+                        </small>
+                      </>
+                    )}
+                  </>
+                )}
+              </div>
               <ArrowRight
                 className="inline-block mx-1"
                 height="1em"

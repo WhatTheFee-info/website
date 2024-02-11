@@ -3,6 +3,7 @@ import { TxTemplate } from '../../../types';
 import { useAppContext } from '../../../context/AppContext';
 import { calculateSatsForFeePercent } from '../../../services/fee.service';
 import { TxTemplateCardMode } from './types';
+import { convertToCurrencyAndFormat } from '../../../services/exchangeRate.service';
 
 export default function TxTemplateCardMinSatsFee({
   template,
@@ -47,23 +48,11 @@ export default function TxTemplateCardMinSatsFee({
       percentMax,
     );
 
-    let cost = minSatsToSpend;
-    let costFormatted = cost?.toFixed(2);
-    if (exRates) {
-      cost = (minSatsToSpend ?? 0) * exRates[selectedCurrency ?? 'BTC'];
-
-      if (selectedCurrency == 'BTC') {
-        // if BTC display in sats
-        costFormatted = cost.toString();
-        costFormatted += ` sats`;
-      } else {
-        // now divide to convert sats to BTC
-        cost = cost / 100000000;
-        costFormatted = fiatNumberFormatter.format(cost);
-        costFormatted += ` ${selectedCurrency}`;
-      }
-    }
-    return costFormatted;
+    return convertToCurrencyAndFormat(
+      minSatsToSpend,
+      exRates,
+      selectedCurrency,
+    );
   }
 
   return (
@@ -72,7 +61,7 @@ export default function TxTemplateCardMinSatsFee({
             ${mode == TxTemplateCardMode.card ? '' : 'md:ms-4'}`}
       title={title ?? `Spend up to ${percent * 100}% in fees`}
     >
-      <div>
+      <div className="flex flex-col justify-center">
         {calculateSatsForFeePercentAndFormat(percent)}
         {selectedCurrency != 'BTC' && (
           <>
