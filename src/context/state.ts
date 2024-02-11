@@ -6,10 +6,8 @@ export interface IAppState {
   theme: Theme;
   txTemplatesCardMode: TxTemplateCardMode;
   feeStats?: FeesStats;
-  feeStatsStatus: StateLoadingStatus;
   feesLastFetchedAt?: Date;
   exRates?: ExchangeRates;
-  exRatesStatsStatus: StateLoadingStatus;
   exRatesLastFetchedAt?: Date;
   selectedCurrency?: string;
   selectedFeeRate: 'medianNextBlock' | 'minimumNextBlock' | 'hour';
@@ -57,10 +55,8 @@ const defaultInitialState: IAppState = {
   theme: Theme.light,
   txTemplatesCardMode: TxTemplateCardMode.row,
   feeStats: undefined,
-  feeStatsStatus: StateLoadingStatus.IDLE,
   feesLastFetchedAt: undefined,
   exRates: { BTC: 1 }, // default to only having BTC
-  exRatesStatsStatus: StateLoadingStatus.IDLE,
   exRatesLastFetchedAt: undefined,
   selectedCurrency: 'BTC', // default to BTC
   selectedFeeRate: 'medianNextBlock',
@@ -72,3 +68,8 @@ export function getInitialState() {
   );
   return { ...defaultInitialState, ...storedState };
 }
+
+export const StateStatus = {
+  exRatesStatsStatus: StateLoadingStatus.IDLE,
+  feeStatsStatus: StateLoadingStatus.IDLE,
+};

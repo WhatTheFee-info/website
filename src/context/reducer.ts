@@ -4,6 +4,7 @@ import { TxTemplateCardMode } from '../ui/components/TxTemplate/types';
 import {
   IAppState,
   StateLoadingStatus,
+  StateStatus,
   getInitialState,
   persistState,
 } from './state';
@@ -18,7 +19,6 @@ export enum ActionType {
   CHANGE_THEME = 'CHANGE_THEME',
   CHANGE_TXTEMPLATE_CARD_MODE = 'CHANGE_TXTEMPLATE_CARD_MODE',
   FETCH_FEE_RATES = 'FETCH_FEE_RATES',
-  STORE_FEE_STATS = 'STORE_FEE_STATS',
   FETCH_EX_RATES = 'FETCH_EX_RATES',
   SET_SELECTED_CURRENCY = 'SET_SELECTED_CURRENCY',
   SET_SELECTED_FEERATE = 'SET_SELECTED_FEERATE',
@@ -32,12 +32,11 @@ export type IAction = {
   selectedCurrency?: string;
   selectedFeeRate?: string;
 };
+
 export async function appReducer(
   prevState: IAppState,
   action: IAction,
 ): Promise<IAppState> {
-  console.debug(`appReducer called: ${action.type}`);
-
   let updatedState = prevState;
 
   switch (action.type) {
@@ -54,34 +53,34 @@ export async function appReducer(
           action.txTemplatesCardMode ?? TxTemplateCardMode.row,
       };
       break;
-    case ActionType.STORE_FEE_STATS:
-      updatedState = {
-        ...prevState,
-        feeStats: action.fees,
-        feeStatsStatus: StateLoadingStatus.DONE,
-        feesLastFetchedAt: new Date(),
-      };
-      break;
     case ActionType.FETCH_FEE_RATES:
-      const feeStats = await fetchFeesStats(prevState);
-      if (feeStats) {
-        updatedState = {
-          ...prevState,
-          feeStats: feeStats,
-          feeStatsStatus: StateLoadingStatus.DONE,
-          feesLastFetchedAt: new Date(),
-        };
+      // avoid calling if already in progress
+      if (StateStatus.feeStatsStatus != StateLoadingStatus.IN_PROGRESS) {
+        StateStatus.feeStatsStatus = StateLoadingStatus.IN_PROGRESS;
+        const feeStats = await fetchFeesStats(prevState);
+        if (feeStats) {
+          updatedState = {
+            ...prevState,
+            feeStats: feeStats,
+            feesLastFetchedAt: new Date(),
+          };
+          StateStatus.feeStatsStatus = StateLoadingStatus.DONE;
+        }
       }
       break;
     case ActionType.FETCH_EX_RATES:
-      const exRates = await fetchExchangeRates(prevState);
-      if (exRates) {
-        updatedState = {
-          ...prevState,
-          exRates: exRates,
-          exRatesStatsStatus: StateLoadingStatus.DONE,
-          exRatesLastFetchedAt: new Date(),
-        };
+      // avoid calling if already in progress
+      if (StateStatus.exRatesStatsStatus != StateLoadingStatus.IN_PROGRESS) {
+        StateStatus.exRatesStatsStatus = StateLoadingStatus.IN_PROGRESS;
+        const exRates = await fetchExchangeRates(prevState);
+        if (exRates) {
+          updatedState = {
+            ...prevState,
+            exRates: exRates,
+            exRatesLastFetchedAt: new Date(),
+          };
+          StateStatus.exRatesStatsStatus = StateLoadingStatus.DONE;
+        }
       }
       break;
     case ActionType.SET_SELECTED_CURRENCY:
@@ -126,7 +125,7 @@ export function useAsyncReducer(
   return [state, dispatch];
 }
 
-async function fetchFeesStats(state: IAppState) {
+function fetchFeesStats(state: IAppState) {
   // only fetch if not fetched fro FEES_FETCH_INTERVAL_SEC seconds
   if (state.feeStats && state.feesLastFetchedAt) {
     const secondsFromLastFetch =
@@ -143,7 +142,7 @@ async function fetchFeesStats(state: IAppState) {
   return feeService.getFeeStats();
 }
 
-async function fetchExchangeRates(state: IAppState) {
+function fetchExchangeRates(state: IAppState) {
   // only fetch if not fetched fro EXRATES_FETCH_INTERVAL_SEC seconds
   if (state.exRates && state.exRatesLastFetchedAt) {
     const secondsFromLastFetch =

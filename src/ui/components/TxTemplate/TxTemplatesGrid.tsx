@@ -50,8 +50,6 @@ export default function TxTemplatesGrid() {
   );
 
   function calculateTemplatesCosts() {
-    console.debug('Calculating size and cost...');
-
     const tagsObject: { [tag: string]: boolean } = {};
     const calculatedTemplates = definedTemplates as TxTemplate[];
     for (let t = 0; t < definedTemplates.length; t++) {

@@ -28,6 +28,7 @@ export async function getFeeStats(): Promise<FeesStats> {
   const mempoolBlockFees = await apiClient.get<FeesMempoolBlock[]>(
     '/fees/mempool-blocks',
   );
+  console.debug('Fetched the fees.');
   return {
     fastest: recommendedFees.fastestFee,
     economy: recommendedFees.economyFee,
