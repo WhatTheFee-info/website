@@ -24,10 +24,6 @@ export default function TxTemplateCardMinSatsFee({
     state: { exRates, selectedCurrency, selectedFeeRate },
   } = useAppContext();
 
-  const fiatNumberFormatter = new Intl.NumberFormat(undefined, {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  });
   const satsNumberFormatter = new Intl.NumberFormat(undefined, {
     minimumFractionDigits: 0,
     maximumFractionDigits: 0,
