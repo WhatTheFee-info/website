@@ -30,7 +30,9 @@ function TxTemplateTotalFees({
     >
       <div className="flex flex-row" title="Total fee for the transaction">
         <Coins />
-        <span className="hidden md:inline">Total fees:</span>
+        {mode == TxTemplateCardMode.row && (
+          <span className="hidden md:inline">Total fees:</span>
+        )}
       </div>
       <div className="ms-1 text-nowrap text-right flex flex-col justify-center">
         {template.costSats && template.costSats[selectedFeeRate] && (
@@ -52,7 +54,6 @@ function TxTemplateTotalFees({
           </>
         )}
       </div>
-      <ArrowRight className="inline-block mx-1" height="1em" width="1em" />
     </div>
   );
 }
@@ -96,7 +97,7 @@ export default function TxTemplateCard({
               <TxTemplateTotalFees
                 mode={mode}
                 template={template}
-                className=""
+                className="me-3"
               />
             )}
             <TxTemplateCardMinSatsFee
