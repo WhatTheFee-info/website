@@ -1,4 +1,4 @@
-import { ArrowRight, Coins, Cube } from 'iconoir-react';
+import { Coins, Cube } from 'iconoir-react';
 import { TxTemplate } from '../../../types';
 import { TxTemplateCardMode } from './types';
 import TxTemplateCardMinSatsFee from './TxTemplateCardMinSatsFee';
