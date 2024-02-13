@@ -8,12 +8,9 @@ import {
   getInitialState,
   persistState,
 } from './state';
-import {
-  EXRATES_FETCH_INTERVAL_SEC,
-  FEES_FETCH_INTERVAL_SEC,
-} from '../constants';
 import * as feeService from '../services/fee.service';
 import * as exchangeRateService from '../services/exchangeRate.service';
+import config from '../config';
 
 export enum ActionType {
   CHANGE_THEME = 'CHANGE_THEME',
@@ -130,7 +127,7 @@ function fetchFeesStats(state: IAppState) {
   if (state.feeStats && state.feesLastFetchedAt) {
     const secondsFromLastFetch =
       (new Date().getTime() - state.feesLastFetchedAt.getTime()) / 1000;
-    if (secondsFromLastFetch < FEES_FETCH_INTERVAL_SEC) {
+    if (secondsFromLastFetch < config.fees.fetchInterval) {
       console.debug(
         `Already fetched fees ${secondsFromLastFetch} seconds ago.`,
       );
@@ -147,7 +144,7 @@ function fetchExchangeRates(state: IAppState) {
   if (state.exRates && state.exRatesLastFetchedAt) {
     const secondsFromLastFetch =
       (new Date().getTime() - state.exRatesLastFetchedAt.getTime()) / 1000;
-    if (secondsFromLastFetch < EXRATES_FETCH_INTERVAL_SEC) {
+    if (secondsFromLastFetch < config.exRates.fetchInterval) {
       console.debug(
         `Already fetched exchange rates ${secondsFromLastFetch} seconds ago.`,
       );

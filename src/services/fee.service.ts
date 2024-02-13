@@ -1,5 +1,5 @@
 import APIClient from '../APIClient';
-import { MEMPOOL_API_BASE_URL } from '../constants';
+import config from '../config';
 import { FeesStats } from '../types';
 
 interface FeesRecommended {
@@ -19,7 +19,7 @@ interface FeesMempoolBlock {
   feeRange: number[];
 }
 
-const apiClient = new APIClient(MEMPOOL_API_BASE_URL);
+const apiClient = new APIClient(config.fees.mempoolBaseUrl);
 
 export async function getFeeStats(): Promise<FeesStats> {
   console.log('Getting the fees...');

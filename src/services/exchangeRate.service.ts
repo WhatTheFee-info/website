@@ -1,5 +1,5 @@
 import APIClient from '../APIClient';
-import { YADIO_API_BASE_URL } from '../constants';
+import config from '../config';
 import { ExchangeRates } from '../types';
 
 interface ExRatesCurrency {
@@ -11,7 +11,7 @@ interface ExRatesCurrency {
   timestamp: number;
 }
 
-const apiClient = new APIClient(YADIO_API_BASE_URL);
+const apiClient = new APIClient(config.exRates.yadioBaseUrl);
 
 const fiatNumberFormatter = new Intl.NumberFormat(undefined, {
   minimumFractionDigits: 2,

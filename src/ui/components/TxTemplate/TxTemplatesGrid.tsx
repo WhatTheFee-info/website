@@ -16,9 +16,9 @@ import {
 import Button from '../Button';
 import { TxTemplateCardMode } from './types';
 import useScreenSize from '../../hooks';
-import { SCREEN_SIZE_MD } from '../../../constants';
 import { ActionType } from '../../../context/reducer';
 import TxTemplateHealthIcon from './TxTemplateHealthIcon';
+import config from '../../../config';
 
 enum SortField {
   name = 'name',
@@ -96,7 +96,7 @@ export default function TxTemplatesGrid() {
   ]);
 
   useEffect(() => {
-    if (screenSize.width <= SCREEN_SIZE_MD) {
+    if (screenSize.width <= config.ui.screenSizeMd) {
       dispatch({
         type: ActionType.CHANGE_TXTEMPLATE_CARD_MODE,
         txTemplatesCardMode: TxTemplateCardMode.card,
