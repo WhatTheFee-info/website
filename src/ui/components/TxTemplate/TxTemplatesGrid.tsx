@@ -15,7 +15,7 @@ import {
 } from 'iconoir-react';
 import Button from '../Button';
 import { TxTemplateCardMode } from './types';
-import useScreenSize from '../../hooks';
+import { useScreenSize } from '../../hooks';
 import { ActionType } from '../../../context/reducer';
 import TxTemplateHealthIcon from './TxTemplateHealthIcon';
 import config from '../../../config';

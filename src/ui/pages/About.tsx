@@ -1,9 +1,14 @@
 import TxTemplateHealthIcon from '../components/TxTemplate/TxTemplateHealthIcon';
+import { usePlayWTFeeAudio } from '../hooks';
 
 export default function About() {
+  const playWTFeeAudio = usePlayWTFeeAudio();
+
   return (
     <div className="text-center mx-auto max-w-3xl">
-      <h1 className="mb-10">About WTFee</h1>
+      <h1 className="mb-10" onClick={playWTFeeAudio}>
+        About WTFee
+      </h1>
       <p className="my-2">
         WTFee helps you analyze the <em>economic health</em> of your UTXO so you
         can determine the best moment to spend them, and the best way to spend
@@ -43,7 +48,8 @@ export default function About() {
 
       <h2 className="text-xl font-bold mt-10">Thanks</h2>
       <p className="mb-10">
-        We want to thank Satoshi, above all.<br/>
+        We want to thank Satoshi, above all.
+        <br />
         We want to thank all the people from Coseco. Their unique nature is a
         constant inspiration, and source of fear and wonder.
       </p>

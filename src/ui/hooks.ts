@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 
-export default function useScreenSize() {
+export function useScreenSize() {
   const [screenSize, setScreenSize] = useState({
     width: window.innerWidth,
     height: window.innerHeight,
@@ -23,4 +23,17 @@ export default function useScreenSize() {
   }, []);
 
   return screenSize;
+}
+
+export function usePlayWTFeeAudio() {
+  const playWTFeeAudio = () => {
+    const targetAudios = document.getElementById(
+      'wtfeeAudio',
+    ) as HTMLAudioElement;
+    if (targetAudios) {
+      targetAudios.play();
+    }
+  };
+
+  return playWTFeeAudio;
 }

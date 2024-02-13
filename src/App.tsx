@@ -6,6 +6,7 @@ import './App.css';
 import SiteHeader from './ui/components/SiteHeader';
 import SiteFooter from './ui/components/SiteFooter';
 import { Outlet } from 'react-router-dom';
+import wtfeeAudio from './assets/wtfee.mp3';
 
 function App() {
   const [state, dispatch] = useAsyncReducer(appReducer, getInitialState());
@@ -31,6 +32,9 @@ function App() {
             </div>
           </main>
           <SiteFooter />
+          <audio id="wtfeeAudio">
+            <source src={wtfeeAudio}></source>
+          </audio>
         </AppDispatchContext.Provider>
       </AppContext.Provider>
     </>
