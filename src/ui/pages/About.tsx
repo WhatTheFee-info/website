@@ -2,8 +2,8 @@ import TxTemplateHealthIcon from '../components/TxTemplate/TxTemplateHealthIcon'
 
 export default function About() {
   return (
-    <div className="text-center">
-      <h1>About WTFee</h1>
+    <div className="text-center mx-auto max-w-3xl">
+      <h1 className="mb-10">About WTFee</h1>
       <p className="my-2">
         WTFee helps you analyze the <em>economic health</em> of your UTXO so you
         can determine the best moment to spend them, and the best way to spend
@@ -41,8 +41,9 @@ export default function About() {
         </ul>
       </p>
 
-      <h3 className="text-lg font-bold mt-10">Thanks</h3>
+      <h2 className="text-xl font-bold mt-10">Thanks</h2>
       <p className="mb-10">
+        We want to thank Satoshi, above all.<br/>
         We want to thank all the people from Coseco. Their unique nature is a
         constant inspiration, and source of fear and wonder.
       </p>

@@ -28,9 +28,6 @@ export default function SiteHeader() {
             🤌 WTFee.today
           </span>
         </a>
-
-        {/* <div className="flex md:order-2 space-x-0 rtl:space-x-reverse">
-        </div> */}
         <div className="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
           <div className="me-3">
             <CurrencySelect />
@@ -55,9 +52,9 @@ export default function SiteHeader() {
             >
               <path
                 stroke="currentColor"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
                 d="M1 1h15M1 7h15M1 13h15"
               />
             </svg>
