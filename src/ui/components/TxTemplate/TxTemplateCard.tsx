@@ -123,7 +123,7 @@ export default function TxTemplateCard({
               mode={mode}
               percent={1}
               title="Uneconomic UTXO spend"
-              color="bg-slate-950"
+              color="bg-black dark:border dark:border-slate-200"
               icon={<>💀</>}
             />
           </div>

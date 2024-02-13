@@ -19,6 +19,7 @@ import { useScreenSize } from '../../hooks';
 import { ActionType } from '../../../context/reducer';
 import TxTemplateHealthIcon from './TxTemplateHealthIcon';
 import config from '../../../config';
+import FeeLevelUTXOReference from '../FeeLevelUTXOReference';
 
 enum SortField {
   name = 'name',
@@ -252,33 +253,14 @@ export default function TxTemplatesGrid() {
       {showInfoBox && (
         <div
           id="info-help"
-          className="flex-1 p-2 text-sm bg-sky-100 mb-2
+          className="flex-1 p-2 text-sm bg-sky-100 dark:bg-sky-900 mb-2
           border border-solid border-sky-400 rounded"
         >
           <p className="mb-1">
             See which are the minimum amounts of sats per UTXO to include in a
             transaction, in order for you to pay a certain % in fees.
           </p>
-          <p className="flex flex-row mb-1">
-            <TxTemplateHealthIcon color={'bg-lime-600'} percent={0.001} />
-            Sats to spend in UTXO for the fees to be up to 0.1%
-          </p>
-          <p className="flex flex-row mb-1">
-            <TxTemplateHealthIcon color={'bg-amber-600'} percent={0.01} />
-            Sats to spend in UTXO for the fees to be up to 1%
-          </p>
-          <p className="flex flex-row mb-1">
-            <TxTemplateHealthIcon color={'bg-red-600'} percent={0.05} />
-            Sats to spend in UTXO for the fees to be 5%
-          </p>
-          <p className="flex flex-row mb-1">
-            <TxTemplateHealthIcon
-              color={'bg-slate-950'}
-              icon={<>💀</>}
-              percent={1}
-            />
-            Sats to spend in UTXO to make in uneconomic (basically dead)
-          </p>
+          <FeeLevelUTXOReference />
         </div>
       )}
       <div className="flex flex-col md:flex-row">

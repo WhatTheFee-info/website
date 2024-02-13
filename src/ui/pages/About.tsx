@@ -1,3 +1,4 @@
+import FeeLevelUTXOReference from '../components/FeeLevelUTXOReference';
 import TxTemplateHealthIcon from '../components/TxTemplate/TxTemplateHealthIcon';
 import { usePlayWTFeeAudio } from '../hooks';
 
@@ -22,28 +23,15 @@ export default function About() {
       </p>
       <p className="my-2 flex flex-col content-center items-center">
         Here is how we identify those scenarios in each transaction template:
-        <ul className="flex flex-col ">
-          <li className="flex flex-row mb-1">
-            <TxTemplateHealthIcon color={'bg-lime-600'} percent={0.001} />
-            Sats to spend in UTXO for the fees to be up to 0.1%
-          </li>
-          <li className="flex flex-row mb-1">
-            <TxTemplateHealthIcon color={'bg-amber-600'} percent={0.01} />
-            Sats to spend in UTXO for the fees to be up to 1%
-          </li>
-          <li className="flex flex-row mb-1">
-            <TxTemplateHealthIcon color={'bg-red-600'} percent={0.05} />
-            Sats to spend in UTXO for the fees to be 5%
-          </li>
-          <li className="flex flex-row mb-1">
-            <TxTemplateHealthIcon
-              color={'bg-slate-950'}
-              icon={<>💀</>}
-              percent={1}
-            />
-            Sats to spend in UTXO to make in uneconomic (basically dead)
-          </li>
-        </ul>
+        <FeeLevelUTXOReference />
+      </p>
+
+      <p className="my-10">
+        If you have any problem or feedback, please leave it here:
+        <br />
+        <a href="https://github.com/wtfee-today/website/issues" target="_blank">
+          https://github.com/wtfee-today/website/issues
+        </a>
       </p>
 
       <h2 className="text-xl font-bold mt-10">Thanks</h2>

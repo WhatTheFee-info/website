@@ -69,7 +69,7 @@ export default function TxTemplateCardMinSatsFee({
           </>
         )}
       </div>
-      <TxTemplateHealthIcon color={color} icon={icon} percent={percent} />
+      <TxTemplateHealthIcon className={color} icon={icon} percent={percent} />
     </div>
   );
 }
