@@ -1,5 +1,4 @@
 import FeeLevelUTXOReference from '../components/FeeLevelUTXOReference';
-import TxTemplateHealthIcon from '../components/TxTemplate/TxTemplateHealthIcon';
 import { usePlayWTFeeAudio } from '../hooks';
 
 export default function About() {

@@ -17,7 +17,6 @@ import Button from '../Button';
 import { TxTemplateCardMode } from './types';
 import { useScreenSize } from '../../hooks';
 import { ActionType } from '../../../context/reducer';
-import TxTemplateHealthIcon from './TxTemplateHealthIcon';
 import config from '../../../config';
 import FeeLevelUTXOReference from '../FeeLevelUTXOReference';
 
