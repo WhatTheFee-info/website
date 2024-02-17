@@ -2,16 +2,27 @@ import { CheckCircle, CheckCircleSolid } from 'iconoir-react';
 import { useAppContext } from '../../../context/AppContext';
 import { ActionType } from '../../../context/reducer';
 import { useState } from 'react';
+import Button from '../Button';
 
 interface FeeRateCardProps {}
 
 export default function CustomFeeRateCard({}: FeeRateCardProps) {
   const {
-    state: { selectedFeeRate, customFeeRate },
+    state: { selectedFeeRate, customFeeRate, feeStats },
     dispatch,
   } = useAppContext();
   const [feeRate, setFeeRate] = useState<number>(customFeeRate);
   const [isInvalidValue, setIsInvalidValue] = useState<boolean>(false);
+
+  function saveNewFeeRate(newFeeRate: number) {
+    setIsInvalidValue(false);
+    setFeeRate(newFeeRate);
+
+    dispatch({
+      type: ActionType.SET_CUSTOM_FEERATE,
+      customFeeRate: newFeeRate,
+    });
+  }
 
   function handleCardClick() {
     dispatch({
@@ -21,6 +32,7 @@ export default function CustomFeeRateCard({}: FeeRateCardProps) {
   }
 
   function handleFeeRateClick(event: React.MouseEvent<HTMLInputElement>) {
+    // prevent selecting the card
     event.stopPropagation();
   }
 
@@ -31,13 +43,20 @@ export default function CustomFeeRateCard({}: FeeRateCardProps) {
       setIsInvalidValue(true);
       return;
     }
-    setIsInvalidValue(false);
-    setFeeRate(number);
 
-    dispatch({
-      type: ActionType.SET_CUSTOM_FEERATE,
-      customFeeRate: number,
-    });
+    saveNewFeeRate(number);
+  }
+
+  function handleMultipleRateClick(
+    multiple: number,
+    event: React.MouseEvent<HTMLButtonElement>,
+  ) {
+    // prevent selecting the card
+    event.stopPropagation();
+
+    // round to 2 decimals
+    const newFeeRate = Math.round((feeStats?.medianNextBlock ?? 0) * multiple);
+    saveNewFeeRate(newFeeRate);
   }
 
   return (
@@ -56,15 +75,33 @@ export default function CustomFeeRateCard({}: FeeRateCardProps) {
       )}
       <h4 className="font-bold text-nowrap">Custom ⚙️🧐</h4>
       <div className="flex flex-row flex-nowrap justify-center">
-        <input
-          className={`flex-initial rounded bg-slate-200 text-slate-900 p-1 text-right text-sm max-w-20
-            ${isInvalidValue ? 'border border-red-700 bg-red-200' : ''}`}
-          type="number"
-          name="custom-fee-rate"
-          defaultValue={feeRate}
-          onChange={handleFeeRateChange}
-          onClick={handleFeeRateClick}
-        />
+        <div>
+          <Button
+            title="2 times the median for next block"
+            onClick={(e) => handleMultipleRateClick(2, e)}
+            className={`rounded-e-none p-[4px] border-e-0 text-sm shadow-none`}
+          >
+            2x
+          </Button>
+          <Button
+            title="5 times the median for next block"
+            onClick={(e) => handleMultipleRateClick(5, e)}
+            className={`rounded-none p-[4px] border-e-0 text-sm shadow-none`}
+          >
+            5x
+          </Button>
+          <input
+            className={`flex-initial rounded-e rounded-s-none 
+              bg-slate-200 border border-slate-700
+              text-slate-900 p-1 text-right text-sm max-w-24
+            ${isInvalidValue ? 'border-red-700 bg-red-200' : ''}`}
+            type="number"
+            name="custom-fee-rate"
+            value={feeRate ?? 0}
+            onChange={handleFeeRateChange}
+            onClick={handleFeeRateClick}
+          />
+        </div>
         <span className="flex-initial whitespace-nowrap ms-2">sat/vB</span>
       </div>
     </div>
