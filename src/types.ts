@@ -53,6 +53,7 @@ export type TxTemplate = {
     minimum: number;
     medianNextBlock: number;
     minimumNextBlock: number;
+    custom: number;
   };
   tags?: string[];
 };

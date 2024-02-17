@@ -10,7 +10,8 @@ export interface IAppState {
   exRates?: ExchangeRates;
   exRatesLastFetchedAt?: Date;
   selectedCurrency?: string;
-  selectedFeeRate: 'medianNextBlock' | 'minimumNextBlock' | 'hour';
+  selectedFeeRate: 'medianNextBlock' | 'minimumNextBlock' | 'hour' | 'custom';
+  customFeeRate: number;
 }
 
 enum LocalStorageKeys {
@@ -34,6 +35,7 @@ function convertToPersistState(state: IAppState) {
     exRatesLastFetchedAt,
     selectedCurrency,
     selectedFeeRate,
+    customFeeRate,
   }) => ({
     theme,
     txTemplatesCardMode,
@@ -43,6 +45,7 @@ function convertToPersistState(state: IAppState) {
     exRatesLastFetchedAt,
     selectedCurrency,
     selectedFeeRate,
+    customFeeRate,
   }))(state);
 }
 
@@ -60,6 +63,7 @@ const defaultInitialState: IAppState = {
   exRatesLastFetchedAt: undefined,
   selectedCurrency: 'BTC', // default to BTC
   selectedFeeRate: 'medianNextBlock',
+  customFeeRate: 0,
 };
 export function getInitialState() {
   const storedState = storageService.getValueObject<object>(

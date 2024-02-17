@@ -32,7 +32,7 @@ enum SortDirection {
 
 export default function TxTemplatesGrid() {
   const {
-    state: { txTemplatesCardMode, feeStats },
+    state: { txTemplatesCardMode, feeStats, customFeeRate },
     dispatch,
   } = useAppContext();
   const screenSize = useScreenSize();
@@ -75,6 +75,7 @@ export default function TxTemplatesGrid() {
         minimumNextBlock: Math.ceil(
           template.sizeVB * (feeStats?.minimumNextBlock ?? 0),
         ),
+        custom: Math.ceil(template.sizeVB * (customFeeRate ?? 0)),
       };
     }
     setCalculatedTemplates(calculatedTemplates);
@@ -83,7 +84,7 @@ export default function TxTemplatesGrid() {
 
   useEffect(() => {
     calculateTemplatesCosts();
-  }, [feeStats]);
+  }, [feeStats, customFeeRate]);
 
   useEffect(() => {
     filterTemplates();

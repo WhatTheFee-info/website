@@ -19,6 +19,7 @@ export enum ActionType {
   FETCH_EX_RATES = 'FETCH_EX_RATES',
   SET_SELECTED_CURRENCY = 'SET_SELECTED_CURRENCY',
   SET_SELECTED_FEERATE = 'SET_SELECTED_FEERATE',
+  SET_CUSTOM_FEERATE = 'SET_CUSTOM_FEERATE',
 }
 export type IAction = {
   type: ActionType;
@@ -28,6 +29,7 @@ export type IAction = {
   exRates?: ExchangeRates;
   selectedCurrency?: string;
   selectedFeeRate?: string;
+  customFeeRate?: number;
 };
 
 export async function appReducer(
@@ -90,6 +92,12 @@ export async function appReducer(
       updatedState = {
         ...prevState,
         selectedFeeRate: action.selectedFeeRate as IAppState['selectedFeeRate'],
+      };
+      break;
+    case ActionType.SET_CUSTOM_FEERATE:
+      updatedState = {
+        ...prevState,
+        customFeeRate: action.customFeeRate ?? 0,
       };
       break;
     default:

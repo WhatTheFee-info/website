@@ -1,6 +1,7 @@
 import * as dateFns from 'date-fns';
 import FeeRateCard from './FeeRateCard';
-import { useAppContext } from '../../context/AppContext';
+import { useAppContext } from '../../../context/AppContext';
+import CustomFeeRateCard from './CustomFeeRateCard';
 
 export default function FeeRatePanel() {
   const {
@@ -27,6 +28,7 @@ export default function FeeRatePanel() {
               level="low"
               feeRateCode={'hour'}
             />
+            <CustomFeeRateCard />
           </div>
           {feesLastFetchedAt && (
             <small className="text-center text-slate-500">

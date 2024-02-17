@@ -1,11 +1,11 @@
 import { CheckCircle, CheckCircleSolid } from 'iconoir-react';
-import { useAppContext } from '../../context/AppContext';
-import { IAppState } from '../../context/state';
-import { ActionType } from '../../context/reducer';
+import { useAppContext } from '../../../context/AppContext';
+import { IAppState } from '../../../context/state';
+import { ActionType } from '../../../context/reducer';
 
 interface FeeRateCardProps {
   title: string;
-  level?: 'no-priority' | 'low' | 'medium' | 'high';
+  level?: 'no-priority' | 'low' | 'medium' | 'high' | 'custom';
   feeRateCode: IAppState['selectedFeeRate'];
 }
 
@@ -44,6 +44,11 @@ export default function FeeRateCard({
       bgClass = 'from-slate-200 to-red-400 dark:from-slate-600 dark:to-red-800';
       borderClas = 'border-red-300 dark:border-red-600';
       break;
+    case 'custom':
+      bgClass =
+        'from-slate-200 to-slate-400 dark:from-slate-600 dark:to-slate-800';
+      borderClas = 'border-slate-300 dark:border-slate-600';
+      break;
   }
 
   return (
@@ -59,7 +64,13 @@ export default function FeeRateCard({
         <CheckCircle className="absolute top-2 left-2 hidden group-hover:block" />
       )}
       <h4 className="font-bold text-nowrap">{title}</h4>
-      <div>{feeStats && Math.round(feeStats[feeRateCode])} sat/vB</div>
+
+      <div>
+        {feeStats &&
+          feeRateCode != 'custom' &&
+          Math.round(feeStats[feeRateCode])}{' '}
+        sat/vB
+      </div>
     </div>
   );
 }

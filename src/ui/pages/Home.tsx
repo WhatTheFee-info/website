@@ -1,4 +1,4 @@
-import FeeRatePanel from '../components/FeeRatePanel';
+import FeeRatePanel from '../components/FeeRate/FeeRatePanel';
 import TxTemplatesGrid from '../components/TxTemplate/TxTemplatesGrid';
 
 export default function Home() {
