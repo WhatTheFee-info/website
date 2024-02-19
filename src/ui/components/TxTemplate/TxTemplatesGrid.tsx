@@ -19,6 +19,7 @@ import { useScreenSize } from '../../hooks';
 import { ActionType } from '../../../context/reducer';
 import config from '../../../config';
 import FeeLevelUTXOReference from '../FeeLevelUTXOReference';
+import { calculateTxCostPerFeeRate } from '../../../services/fee.service';
 
 enum SortField {
   name = 'name',
@@ -63,20 +64,11 @@ export default function TxTemplatesGrid() {
 
       template.sizeVB = calcaulteSize(template);
       // now calculate cost (use Math.ceil to round up sats amoung)
-      template.costSats = {
-        economy: Math.ceil(template.sizeVB * (feeStats?.economy ?? 0)),
-        minimum: Math.ceil(template.sizeVB * (feeStats?.minimum ?? 0)),
-        hour: Math.ceil(template.sizeVB * (feeStats?.hour ?? 0)),
-        halfHour: Math.ceil(template.sizeVB * (feeStats?.halfHour ?? 0)),
-        fastest: Math.ceil(template.sizeVB * (feeStats?.fastest ?? 0)),
-        medianNextBlock: Math.ceil(
-          template.sizeVB * (feeStats?.medianNextBlock ?? 0),
-        ),
-        minimumNextBlock: Math.ceil(
-          template.sizeVB * (feeStats?.minimumNextBlock ?? 0),
-        ),
-        custom: Math.ceil(template.sizeVB * (customFeeRate ?? 0)),
-      };
+      template.costSats = calculateTxCostPerFeeRate(
+        template,
+        feeStats,
+        customFeeRate,
+      );
     }
     setCalculatedTemplates(calculatedTemplates);
     setTagsFilter(tagsObject);

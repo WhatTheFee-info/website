@@ -1,6 +1,6 @@
 import APIClient from '../APIClient';
 import config from '../config';
-import { FeesStats } from '../types';
+import { FeesStats, TxTemplate } from '../types';
 
 interface FeesRecommended {
   fastestFee: number;
@@ -38,6 +38,42 @@ export async function getFeeStats(): Promise<FeesStats> {
     medianNextBlock: mempoolBlockFees[0].medianFee,
     minimumNextBlock: mempoolBlockFees[0].feeRange[0],
   };
+}
+
+export function calculateTxCostPerFeeRate(
+  template: TxTemplate,
+  feeStats?: FeesStats,
+  customFeeRate?: number,
+) {
+  let costSats = {
+    economy: 0,
+    minimum: 0,
+    hour: 0,
+    halfHour: 0,
+    fastest: 0,
+    medianNextBlock: 0,
+    minimumNextBlock: 0,
+    custom: 0,
+  };
+
+  if (template.sizeVB) {
+    costSats = {
+      economy: Math.ceil(template.sizeVB * (feeStats?.economy ?? 0)),
+      minimum: Math.ceil(template.sizeVB * (feeStats?.minimum ?? 0)),
+      hour: Math.ceil(template.sizeVB * (feeStats?.hour ?? 0)),
+      halfHour: Math.ceil(template.sizeVB * (feeStats?.halfHour ?? 0)),
+      fastest: Math.ceil(template.sizeVB * (feeStats?.fastest ?? 0)),
+      medianNextBlock: Math.ceil(
+        template.sizeVB * (feeStats?.medianNextBlock ?? 0),
+      ),
+      minimumNextBlock: Math.ceil(
+        template.sizeVB * (feeStats?.minimumNextBlock ?? 0),
+      ),
+      custom: Math.ceil(template.sizeVB * (customFeeRate ?? 0)),
+    };
+  }
+
+  return costSats;
 }
 
 export function calculateSatsForFeePercent(

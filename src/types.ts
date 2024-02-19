@@ -33,17 +33,20 @@ export enum TxOutputType {
   P2TR = 'p2tr',
 }
 
+export type TxTemplateInput = {
+  type: TxInputType;
+  additionalVBytes?: number;
+};
+export type TxTemplateOutput = {
+  type: TxOutputType;
+  additionalVBytes?: number;
+};
+
 export type TxTemplate = {
   code: string;
   name: string;
-  inputs: {
-    type: TxInputType;
-    additionalVBytes?: number;
-  }[];
-  outputs: {
-    type: TxOutputType;
-    additionalVBytes?: number;
-  }[];
+  inputs: TxTemplateInput[];
+  outputs: TxTemplateOutput[];
   sizeVB?: number;
   costSats?: {
     fastest: number;

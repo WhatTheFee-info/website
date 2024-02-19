@@ -5,6 +5,7 @@ import App from './App.tsx';
 import Home from './ui/pages/Home.tsx';
 import './index.css';
 import About from './ui/pages/About.tsx';
+import CustomTX from './ui/pages/CustomTX.tsx';
 
 const router = createHashRouter([
   {
@@ -18,6 +19,10 @@ const router = createHashRouter([
       {
         path: '/about',
         element: <About />,
+      },
+      {
+        path: '/custom-tx',
+        element: <CustomTX />,
       },
     ],
   },
