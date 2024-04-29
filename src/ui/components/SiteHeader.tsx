@@ -81,6 +81,17 @@ export default function SiteHeader() {
             </li>
             <li>
               <NavLink
+                to={`/templates`}
+                aria-current="page"
+                className={({ isActive }) =>
+                  `block py-2 px-3 rounded ${isActive ? linkSelectedClass : linkRegularClass}`
+                }
+              >
+                Templates
+              </NavLink>
+            </li>
+            <li>
+              <NavLink
                 to={`/about`}
                 aria-current="page"
                 className={({ isActive }) =>

@@ -310,7 +310,7 @@ export default function TxTemplatesGrid() {
           </Button>
         </div>
       </div>
-      <div className="flex flex-col md:flex-row mt-1">
+      <div className="flex flex-col md:flex-row my-4">
         <span>Filter by tags: </span>
         {renderTagsForFiltering()}
       </div>
@@ -321,7 +321,7 @@ export default function TxTemplatesGrid() {
             {searchText && ` for the term "${searchText}"`})
           </p>
         ) : (
-          <div className="flex sm:flex-row sm:flex-wrap flex-col">
+          <div className="flex sm:flex-row sm:flex-wrap flex-col gap-4">
             {finalTemplates.map((template) => (
               <TxTemplateCard
                 key={template.code}

@@ -66,7 +66,7 @@ export default function TxTemplateCard({
     <div
       className={`flex flex-col rounded border bg-white border-slate-300 shadow
         dark:bg-slate-950 dark:border-slate-600 dark:shadow-slate-400
-          hover:shadow-lg p-4 m-2
+          hover:shadow-lg p-4
           ${mode == TxTemplateCardMode.card ? '' : 'md:w-full'}`}
     >
       <div className="flex flex-row p-1">
