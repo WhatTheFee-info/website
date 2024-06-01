@@ -4,11 +4,12 @@ import {
   calculateSatsForFeePercent,
   calculateTxCostPerFeeRate,
 } from '../../services/fee.service';
+import { convertToCurrencyAndFormat } from '../../services/exchangeRate.service';
 import Card from './Card';
 import TxTemplateHealthIcon from './TxTemplate/TxTemplateHealthIcon';
 import { TxTemplate } from '../../types';
 import definedTemplates from '../../templates';
-import { convertToCurrencyAndFormat } from '../../services/exchangeRate.service';
+import { calcaulteSize } from '../../services/transaction.service';
 
 export default function DeadUTXOCard() {
   const {
@@ -30,21 +31,33 @@ export default function DeadUTXOCard() {
   });
 
   useEffect(() => {
-    const sortedTemplates = definedTemplates.sort(
-      (t1, t2) => (t1.sizeVB ?? 0) - (t2.sizeVB ?? 0),
+    // get the smaller tx
+    const smallerTxTem = definedTemplates.find(
+      (template) => template.code == 'p2wpkh_1i-1o',
     );
-    const smallerTxTem = sortedTemplates[0];
-    // recalculate cost
-    smallerTxTem.costSats = calculateTxCostPerFeeRate(
-      smallerTxTem,
-      feeStats,
-      customFeeRate,
-    );
+    if (smallerTxTem) {
+      // recalculate cost
+      if (!smallerTxTem.sizeVB) {
+        smallerTxTem.sizeVB = calcaulteSize(smallerTxTem);
+      }
+      smallerTxTem.costSats = calculateTxCostPerFeeRate(
+        smallerTxTem,
+        feeStats,
+        customFeeRate,
+      );
 
-    // calcaulte and prepare amounts for display
-    setSatsAmountFormatted(calculateSatsForFeePercentAndFormat(smallerTxTem));
-    setFiatAmountFormatted(calculateFiatForPercentAndFormat(smallerTxTem));
-  }, [definedTemplates, selectedFeeRate, customFeeRate]);
+      // calcaulte and prepare amounts for display
+      setSatsAmountFormatted(calculateSatsForFeePercentAndFormat(smallerTxTem));
+      setFiatAmountFormatted(calculateFiatForPercentAndFormat(smallerTxTem));
+    }
+    console.debug('useeffect', satsAmountFormatted);
+  }, [
+    definedTemplates,
+    feeStats,
+    selectedFeeRate,
+    customFeeRate,
+    selectedCurrency,
+  ]);
 
   function calculateSatsForFeePercentAndFormat(template: TxTemplate) {
     if (!template) return '';

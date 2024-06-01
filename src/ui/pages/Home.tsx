@@ -1,17 +1,20 @@
 import { useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { FastArrowRight } from 'iconoir-react';
+import { calcaulteSize } from '../../services/transaction.service';
+// components
 import CustomFeeRateCard from '../components/FeeRate/CustomFeeRateCard';
 import FeeRateCard from '../components/FeeRate/FeeRateCard';
 import TxTemplateCard from '../components/TxTemplate/TxTemplateCard';
+import DeadUTXOCard from '../components/DeadUTXOCard';
+import { TxTemplateCardMode } from '../components/TxTemplate/types';
+import Card from '../components/Card';
+
 import { TxTemplate } from '../../types';
 import { useAppContext } from '../../context/AppContext';
-import { TxTemplateCardMode } from '../components/TxTemplate/types';
 import definedTemplates from '../../templates';
 import { useScreenSize } from '../hooks';
 import config from '../../config';
-import DeadUTXOCard from '../components/DeadUTXOCard';
-import Card from '../components/Card';
 
 export default function Home() {
   const {
@@ -27,6 +30,10 @@ export default function Home() {
       (template) => template.code == 'p2wpkh_1i-2o',
     );
 
+    if (simpleTxTem) {
+      // now calculate size
+      simpleTxTem.sizeVB = calcaulteSize(simpleTxTem);
+    }
     setSimpleTxTemplate(simpleTxTem);
   }, [feeStats, customFeeRate]);
 

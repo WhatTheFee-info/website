@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { TxTemplate } from '../../../types';
-import { calcaulteSize } from '../../../services/transaction.service';
 import definedTemplates from '../../../templates';
 import TxTemplateCard from './TxTemplateCard';
 import { useAppContext } from '../../../context/AppContext';
@@ -19,7 +18,6 @@ import { useScreenSize } from '../../hooks';
 import { ActionType } from '../../../context/reducer';
 import config from '../../../config';
 import FeeLevelUTXOReference from '../FeeLevelUTXOReference';
-import { calculateTxCostPerFeeRate } from '../../../services/fee.service';
 
 enum SortField {
   name = 'name',
@@ -33,7 +31,7 @@ enum SortDirection {
 
 export default function TxTemplatesGrid() {
   const {
-    state: { txTemplatesCardMode, feeStats, customFeeRate },
+    state: { txTemplatesCardMode },
     dispatch,
   } = useAppContext();
   const screenSize = useScreenSize();
@@ -49,7 +47,7 @@ export default function TxTemplatesGrid() {
     SortDirection.asc,
   );
 
-  function calculateTemplatesCosts() {
+  function initializeTemplates() {
     const tagsObject: { [tag: string]: boolean } = {};
     const calculatedTemplates = definedTemplates as TxTemplate[];
     for (let t = 0; t < definedTemplates.length; t++) {
@@ -59,24 +57,14 @@ export default function TxTemplatesGrid() {
       template.tags?.map((tag) => {
         tagsObject[tag] = false; // not filtered by it
       });
-
-      // now calculate cost
-
-      template.sizeVB = calcaulteSize(template);
-      // now calculate cost (use Math.ceil to round up sats amoung)
-      template.costSats = calculateTxCostPerFeeRate(
-        template,
-        feeStats,
-        customFeeRate,
-      );
     }
     setCalculatedTemplates(calculatedTemplates);
     setTagsFilter(tagsObject);
   }
 
   useEffect(() => {
-    calculateTemplatesCosts();
-  }, [feeStats, customFeeRate]);
+    initializeTemplates();
+  }, []);
 
   useEffect(() => {
     filterTemplates();

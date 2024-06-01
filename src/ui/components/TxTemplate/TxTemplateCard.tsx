@@ -4,6 +4,9 @@ import { TxTemplateCardMode } from './types';
 import TxTemplateCardMinSatsFee from './TxTemplateCardMinSatsFee';
 import { useAppContext } from '../../../context/AppContext';
 import { convertToCurrencyAndFormat } from '../../../services/exchangeRate.service';
+import { useEffect } from 'react';
+import { calcaulteSize } from '../../../services/transaction.service';
+import { calculateTxCostPerFeeRate } from '../../../services/fee.service';
 
 interface TxTemplateCardProps {
   template: TxTemplate;
@@ -62,6 +65,25 @@ export default function TxTemplateCard({
   template,
   mode = TxTemplateCardMode.card,
 }: TxTemplateCardProps) {
+  const {
+    state: {
+      exRates,
+      selectedCurrency,
+      selectedFeeRate,
+      customFeeRate,
+      feeStats,
+    },
+  } = useAppContext();
+
+  useEffect(() => {
+    // recalculate cost
+    template.sizeVB = calcaulteSize(template);
+    template.costSats = calculateTxCostPerFeeRate(
+      template,
+      feeStats,
+      customFeeRate,
+    );
+  }, [feeStats, selectedFeeRate, customFeeRate, selectedCurrency, exRates]);
   return (
     <div
       className={`flex flex-col rounded border bg-white border-slate-300 shadow
