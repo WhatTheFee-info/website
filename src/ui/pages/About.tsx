@@ -22,8 +22,10 @@ export default function About() {
       </p>
       <p className="my-2 flex flex-col content-center items-center">
         Here is how we identify those scenarios in each transaction template:
-        <FeeLevelUTXOReference />
       </p>
+      <div className="my-2 flex flex-col content-center items-center">
+        <FeeLevelUTXOReference />
+      </div>
 
       <p className="my-10">
         If you have any problem or feedback, please leave it here:
