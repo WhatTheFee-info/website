@@ -1,6 +1,4 @@
-import React, { useEffect } from 'react';
-import { useAppContext } from '../../context/AppContext';
-import { ActionType } from '../../context/reducer';
+import React from 'react';
 
 interface SelectItem {
   value: string;

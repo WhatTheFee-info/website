@@ -16,7 +16,6 @@ import Card from '../components/Card';
 export default function Home() {
   const {
     state: { feeStats, customFeeRate },
-    dispatch,
   } = useAppContext();
   const screenSize = useScreenSize();
 
