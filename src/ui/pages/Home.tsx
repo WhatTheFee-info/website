@@ -11,6 +11,7 @@ import definedTemplates from '../../templates';
 import { useScreenSize } from '../hooks';
 import config from '../../config';
 import DeadUTXOCard from '../components/DeadUTXOCard';
+import Card from '../components/Card';
 
 export default function Home() {
   const {
@@ -75,7 +76,9 @@ export default function Home() {
       )}
 
       <section id="tx-custom-simple" className="mb-8">
-        [SIMPLE CUSTOM TX BUILDER]
+        <Card className="text-center">
+          Build your own transaction. Coming soon...
+        </Card>
       </section>
     </>
   );
