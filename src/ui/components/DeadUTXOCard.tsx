@@ -1,6 +1,9 @@
 import { useEffect, useState } from 'react';
 import { useAppContext } from '../../context/AppContext';
-import { calculateSatsForFeePercent } from '../../services/fee.service';
+import {
+  calculateSatsForFeePercent,
+  calculateTxCostPerFeeRate,
+} from '../../services/fee.service';
 import Card from './Card';
 import TxTemplateHealthIcon from './TxTemplate/TxTemplateHealthIcon';
 import { TxTemplate } from '../../types';
@@ -9,10 +12,17 @@ import { convertToCurrencyAndFormat } from '../../services/exchangeRate.service'
 
 export default function DeadUTXOCard() {
   const {
-    state: { exRates, selectedCurrency, selectedFeeRate },
+    state: {
+      exRates,
+      selectedCurrency,
+      selectedFeeRate,
+      customFeeRate,
+      feeStats,
+    },
   } = useAppContext();
 
-  const [smallerTxTemplate, setSmallerTxTemplate] = useState<TxTemplate>();
+  const [satsAmountFormatted, setSatsAmountFormatted] = useState<string>('0');
+  const [fiatAmountFormatted, setFiatAmountFormatted] = useState<string>('0');
 
   const satsNumberFormatter = new Intl.NumberFormat(undefined, {
     minimumFractionDigits: 0,
@@ -24,34 +34,38 @@ export default function DeadUTXOCard() {
       (t1, t2) => (t1.sizeVB ?? 0) - (t2.sizeVB ?? 0),
     );
     const smallerTxTem = sortedTemplates[0];
+    // recalculate cost
+    smallerTxTem.costSats = calculateTxCostPerFeeRate(
+      smallerTxTem,
+      feeStats,
+      customFeeRate,
+    );
 
-    setSmallerTxTemplate(smallerTxTem);
-  }, [definedTemplates]);
+    // calcaulte and prepare amounts for display
+    setSatsAmountFormatted(calculateSatsForFeePercentAndFormat(smallerTxTem));
+    setFiatAmountFormatted(calculateFiatForPercentAndFormat(smallerTxTem));
+  }, [definedTemplates, selectedFeeRate, customFeeRate]);
 
-  function calculateSatsForFeePercentAndFormat() {
-    if (!smallerTxTemplate) return '';
+  function calculateSatsForFeePercentAndFormat(template: TxTemplate) {
+    if (!template) return '';
 
     const minSatsToSpend =
       calculateSatsForFeePercent(
-        (smallerTxTemplate.costSats &&
-          smallerTxTemplate.costSats[selectedFeeRate]) ??
-          0,
+        (template.costSats && template.costSats[selectedFeeRate]) ?? 0,
         1,
-      ) / smallerTxTemplate.inputs.length;
+      ) / template.inputs.length;
 
     return satsNumberFormatter.format(minSatsToSpend);
   }
 
-  function calculateFiatForPercentAndFormat() {
-    if (!smallerTxTemplate) return '';
+  function calculateFiatForPercentAndFormat(template: TxTemplate) {
+    if (!template) return '';
 
     const minSatsToSpendPerUTXO =
       calculateSatsForFeePercent(
-        (smallerTxTemplate.costSats &&
-          smallerTxTemplate.costSats[selectedFeeRate]) ??
-          0,
+        (template.costSats && template.costSats[selectedFeeRate]) ?? 0,
         1,
-      ) / smallerTxTemplate.inputs.length;
+      ) / template.inputs.length;
 
     return convertToCurrencyAndFormat(
       minSatsToSpendPerUTXO,
@@ -73,10 +87,10 @@ export default function DeadUTXOCard() {
           className={`rounded-full mx-1 py-1 px-2
           bg-slate-950 text-slate-200 dark:bg-slate-200 dark:text-slate-950 `}
         >
-          {calculateSatsForFeePercentAndFormat()} sat{' '}
+          {satsAmountFormatted} sat{' '}
           {selectedCurrency != 'BTC' && (
             <>
-              <small>({calculateFiatForPercentAndFormat()})</small>
+              <small>({fiatAmountFormatted})</small>
             </>
           )}
         </span>{' '}
