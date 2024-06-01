@@ -68,7 +68,7 @@ export default function DeadUTXOCard() {
         percent={1}
       />
       <p>
-        UTXO equal or under{' '}
+        UTXOs equal or under{' '}
         <span
           className={`rounded-full mx-1 py-1 px-2
           bg-slate-950 text-slate-200 dark:bg-slate-200 dark:text-slate-950 `}

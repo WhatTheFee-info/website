@@ -1,4 +1,6 @@
 import { useEffect, useState } from 'react';
+import { NavLink } from 'react-router-dom';
+import { FastArrowRight } from 'iconoir-react';
 import CustomFeeRateCard from '../components/FeeRate/CustomFeeRateCard';
 import FeeRateCard from '../components/FeeRate/FeeRateCard';
 import TxTemplateCard from '../components/TxTemplate/TxTemplateCard';
@@ -18,8 +20,7 @@ export default function Home() {
   const screenSize = useScreenSize();
 
   const [simpleTxTemplate, setSimpleTxTemplate] = useState<TxTemplate>();
-  const [txCardMode, setTxCardMode] =
-    useState<TxTemplateCardMode>();
+  const [txCardMode, setTxCardMode] = useState<TxTemplateCardMode>();
 
   useEffect(() => {
     const simpleTxTem = definedTemplates.find(
@@ -59,6 +60,12 @@ export default function Home() {
 
       {simpleTxTemplate && (
         <section id="tx-simple-health" className="mb-8">
+          <div className="text-right">
+            <NavLink to={`/templates`} aria-current="page">
+              See more transaction templates
+              <FastArrowRight className="inline-block ms-1" />
+            </NavLink>
+          </div>
           <TxTemplateCard
             key={simpleTxTemplate.code}
             template={simpleTxTemplate}
