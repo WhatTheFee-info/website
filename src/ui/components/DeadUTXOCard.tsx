@@ -50,7 +50,6 @@ export default function DeadUTXOCard() {
       setSatsAmountFormatted(calculateSatsForFeePercentAndFormat(smallerTxTem));
       setFiatAmountFormatted(calculateFiatForPercentAndFormat(smallerTxTem));
     }
-    console.debug('useeffect', satsAmountFormatted);
   }, [
     definedTemplates,
     feeStats,
